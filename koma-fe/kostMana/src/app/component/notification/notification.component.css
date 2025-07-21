@@ -1,0 +1,214 @@
+.notification-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 20px;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-dark);
+}
+
+.notification-header {
+  color: var(--color-primary);
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notification-item {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-muted);
+  color: var(--color-dark);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-title {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.notification-meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.notification-divider {
+  height: 1px;
+  background-color: var(--color-muted);
+  margin-top: 10px;
+}
+
+.add-notif-btn {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 24px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+  margin-bottom: 24px;
+  margin-top: 8px;
+  margin-left: 0;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.add-notif-btn:hover, .add-notif-btn:focus {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: 0 4px 16px rgba(79, 140, 255, 0.25);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.notif-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.notif-title-row h2 {
+  margin-right: auto;
+}
+
+.notif-action-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.edit-notif-btn,
+.delete-notif-btn {
+  background: var(--color-accent);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(79, 140, 255, 0.08);
+}
+
+.edit-notif-btn mat-icon {
+  color: var(--color-primary);
+  font-size: 22px;
+}
+
+.delete-notif-btn {
+  background: var(--color-accent, #ff4f4f);
+  box-shadow: 0 1px 4px rgba(255, 79, 79, 0.08);
+}
+
+.delete-notif-btn mat-icon {
+  color: var(--color-danger, #ff4f4f);
+  font-size: 22px;
+}
+
+.edit-notif-btn:hover, .edit-notif-btn:focus {
+  background: var(--color-warning, #ffeaea);
+  box-shadow: 0 2px 8px rgba(255, 79, 79, 0.15);
+}
+
+.delete-notif-btn:hover, .delete-notif-btn:focus {
+  background: var(--color-warning, #ffeaea);
+  box-shadow: 0 2px 8px rgba(255, 79, 79, 0.15);
+}
+
+/* Approval Button Styling with Improved Theme Colors */
+.approval-btn {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 18px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.12);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.approval-btn:hover, .approval-btn:focus {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.item-approved {
+  display: inline-block;
+  padding: 3px 14px;
+  border-radius: 12px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+  border: 2px solid #22c55e;
+}
+
+.item-rejected {
+  display: inline-block;
+  padding: 3px 14px;
+  border-radius: 12px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+  border: 2px solid #ff4f4f;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .notification-container {
+    padding: 15px 15px;
+  }
+
+  .notification-header {
+    font-size: 1.8rem;
+  }
+
+  .notification-title {
+    font-size: 1.3rem;
+  }
+
+  .notification-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-container {
+    padding: 10px 10px;
+  }
+
+  .notification-header {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .notification-item {
+    padding: 15px;
+  }
+
+  .notification-title {
+    font-size: 1.2rem;
+  }
+}

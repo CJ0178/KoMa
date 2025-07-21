@@ -1,0 +1,34 @@
+<div class="notification-container">
+  <h1 class="notification-header">Notifikasi</h1>
+  <button *ngIf="isAllowAdd()" class="add-notif-btn" (click)="openAddNotificationDialog()">Tambah Notifikasi</button>
+
+  <div class="notification-list">
+    <div class="notification-item" *ngFor="let notification of notifications">
+      <div class="notif-title-row">
+        <h2 class="notification-title">{{notification.title}}</h2>
+        <div class="notif-action-btns">
+          <button *ngIf="isAllowAdd() && notification.user_create === userEmail && !notification.user_id" class="edit-notif-btn" (click)="onEditNotification(notification)" title="Edit Notifikasi">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button *ngIf="isAllowAdd() && notification.user_create === userEmail && !notification.user_id" class="delete-notif-btn" (click)="onDeleteNotification(notification)" title="Hapus Notifikasi">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="notification-content">{{notification.content}}</div>
+      <ng-container *ngIf="notification.allow_approve && notification.title === 'APPROVAL-BOOKING'">
+        <button class="approval-btn booking-approval" (click)="onApproveBooking(notification)">Approval Booking</button>
+      </ng-container>
+      <ng-container *ngIf="notification.allow_approve && notification.title === 'APPROVAL-KEEPER'">
+        <button class="approval-btn keeper-approval" (click)="onApproveKeeper(notification)">Approval Penjaga</button>
+      </ng-container>
+      <ng-container *ngIf="notification.status_approve === 'BOOKING_REJECTED' || notification.status_approve === 'REJECT'">
+        <div class="item-rejected">Permintaan sudah ditolak</div>
+      </ng-container>
+      <ng-container *ngIf="notification.status_approve === 'PAID' || notification.status_approve === 'PENDING_PAYMENT' || notification.status_approve === 'APPROVE'">
+        <div class="item-approved">Permintaan sudah disetujui</div>
+      </ng-container>
+      <div class="notification-divider"></div>
+    </div>
+  </div>
+</div>

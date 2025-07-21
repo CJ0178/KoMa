@@ -1,0 +1,425 @@
+/* Remove local :root color definitions and use global CSS variables from style.css */
+/* ...existing code... */
+
+/* Remove this block:
+:root {
+  --main-bg: #f7f9fc;
+  --panel-bg: #1e3a5f;
+  --text-light: #ffffff;
+  --highlight-yellow: #F4C542;
+  --card-bg: #2c4a72;
+  --font-dark: #29303b;
+  --color-accent: #F4C542;
+  --color-primary: #29303b;
+  --color-muted: #b0b0b0;
+  --color-dark: #29303b;
+}
+*/
+
+:root {
+  --main-bg: #f7f9fc;
+  --panel-bg: #1e3a5f;
+  --text-light: #ffffff;
+  --highlight-yellow: #facc15;
+  --card-bg: #2c4a72;
+  --font-dark: #111827;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+  background-color: var(--color-bg);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--color-dark);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-primary);
+}
+
+.info {
+  margin-top: 1.5rem;
+  background-color: var(--color-bg);
+  padding: 1.5rem;
+  border-radius: 10px;
+  color: var(--color-dark);
+}
+
+.price {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.overall-grid{
+  margin-top: 8px;
+  border-radius: 15px;
+  background-color: #1e3a5f;
+  color: whitesmoke;
+}
+
+.share-button {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 18px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.12);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.share-button:hover, .share-button:focus {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  box-shadow: 0 4px 16px rgba(244, 197, 66, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.book-button {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 18px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(244, 197, 66, 0.12);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.book-button:hover, .book-button:focus {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.facilities {
+  color: var(--color-bg);
+}
+
+.facility-card {
+  background-color: var(--color-muted);
+}
+
+.edit-unit-btn {
+  background: linear-gradient(90deg, var(--color-primary), #2d3a4a);
+  color: var(--color-bg);
+}
+.edit-unit-btn:hover {
+  background: linear-gradient(90deg, #2d3a4a, var(--color-primary));
+}
+
+.delete-unit-btn {
+  background: #e74c3c;
+  color: #fff;
+}
+.delete-unit-btn:hover {
+  background: #c0392b;
+}
+
+.gradient-button {
+  background: linear-gradient(45deg, var(--color-primary), #414c5d, var(--color-primary));
+  color: var(--color-accent);
+}
+.button-text {
+  color: var(--color-accent);
+}
+
+.desc-toggle {
+  color: var(--color-accent);
+}
+
+.image-container-complete{
+  display: flex;
+  flex-direction: column;
+}
+
+.waImg{
+  width: 15px;
+}
+
+.details-grid {
+  display: flex;
+  gap: 32px;
+}
+
+.details-grid .firstGrid,
+.details-grid .secondGrid {
+  flex: 1;
+  min-width: 200px;
+  padding: 1.5rem;
+}
+
+.details-grid .secondGrid {
+  border-left: 4px solid #facc15;
+}
+
+.facilities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border-top: 3px solid #facc15;
+  border-bottom: 3px solid #facc15;
+}
+
+.facilities div {
+  background-color: #425D77;
+  border-radius: 10px;
+  margin: 1rem;
+  padding: 0.5rem;
+}
+
+.facilities h4 {
+  color: var(--highlight-yellow);
+  margin-bottom: 0.5rem;
+}
+
+.facilities ul {
+  padding-left: 1rem;
+}
+
+.contacts {
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.contacts h4 {
+  color: var(--highlight-yellow);
+}
+
+.contact-item {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 50%;
+  align-items: center;
+}
+
+.contact-list{
+  display: flex;
+  flex-direction: row;
+}
+
+.gallery-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  grid-row: 1;
+}
+
+.gallery-img:hover {
+  transform: scale(1.03);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: auto;
+}
+
+.carousel-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.carousel-slide img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: 600px;
+  border-radius: 8px;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 0 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+/* Styling for Edit Unit button */
+.edit-unit-btn {
+  background: linear-gradient(90deg, var(--color-primary), #2d3a4a);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  margin: 1rem 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  min-width: unset;
+  max-width: 220px;
+}
+.edit-unit-btn:hover {
+  background: linear-gradient(90deg, #2d3a4a, var(--color-primary));
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Styling for Delete Unit button */
+.delete-unit-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  margin: 1rem 0 1rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s, transform 0.2s;
+}
+.delete-unit-btn:hover {
+  background: #c0392b;
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Optional: space between buttons */
+.button-list {
+  display: flex;
+  gap: 12px;
+}
+
+.gradient-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(45deg, var(--color-primary), #414c5d, var(--color-primary));
+  background-size: 200% auto;
+  color: var(--color-accent);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+.gradient-button:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+.gradient-button:active {
+  transform: translateY(0);
+}
+.button-text {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+.deskripsi-box p.collapsed {
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-line;
+}
+.desc-toggle {
+  cursor: pointer;
+  color: var(--color-accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.copy-btn mat-icon {
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.copy-btn:hover mat-icon {
+  color: var(--color-accent);
+}
+.copy-btn:active mat-icon {
+  color: var(--color-primary);
+}
+
+@media (max-width: 850px) {
+  .details-grid {
+    flex-direction: column;
+  }
+
+  .image-container-complete{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .firstGrid{
+    border: none;
+  }
+
+  .carousel-slide img {
+    height: 400px;
+  }
+}

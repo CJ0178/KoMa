@@ -1,0 +1,27 @@
+.midtrans-error-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.midtrans-error-container h1 {
+  color: #F44336;
+  margin-bottom: 16px;
+}
+.btn-home {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 10px 24px;
+  background: var(--accent-yellow-bright, #facc15);
+  color: #222;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-home:hover {
+  background: #ffe066;
+}

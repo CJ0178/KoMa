@@ -1,0 +1,70 @@
+<!-- tagihan-kos.component.html -->
+<div class="container">
+  <h1 class="header">Tagihan Kos</h1>
+
+  <div class="tabs">
+    <div class="tab" [class.active]="selectedTab == 'OnGoing'" (click)="changeTab('OnGoing')">Tagihan Aktif</div>
+    <div class="tab" [class.active]="selectedTab == 'Done'" (click)="changeTab('Done')">Riwayat Pembayaran</div>
+  </div>
+
+  <div *ngIf="selectedTab == 'OnGoing'">
+    <div *ngIf="onGoingBills.length === 0" class="no-bills-info">
+      <p>Tidak ada data tagihan yang harus dibayar.</p>
+    </div>
+    <div *ngIf="onGoingBills.length > 0" class="bill-cards">
+      <div *ngFor="let bill of onGoingBills" class="bill-card" [ngClass]="getStatusClass(bill.status)"
+        (click)="toggleBillSelection(bill)">
+        <div class="bill-header">
+          <div class="bill-title">Periode: <strong>{{bill.month}} {{bill.year}}</strong></div>
+          <span *ngIf="bill.status === 'Telat'" class="late-badge">Telat {{bill.daysLate}} hari</span>
+        </div>
+        <div class="bill-details">
+          <div class="bill-amount">Total Tagihan: <span class="amount">Rp {{bill.amount|number}}</span></div>
+          <div class="bill-due">Jatuh Tempo: <span class="due-date">{{bill.dueDate}}</span></div>
+          <div class="bill-status">Status: <span [ngClass]="getStatusClass(bill.status)">{{bill.status === 'PENDING_PAYMENT' ? 'Belum Dibayar' : bill.status}}</span></div>
+        </div>
+        <div class="bill-checkmark" *ngIf="selectionT1.isSelected(bill)">
+          <span style="color: var(--accent-yellow-bright); font-size: 1.5em;">&#10003;</span>
+        </div>
+      </div>
+    </div>
+    <mat-divider *ngIf="onGoingBills.length > 0"></mat-divider>
+    <div class="bill-actions" *ngIf="onGoingBills.length > 0">
+      <button class="checkAll-button" (click)="selectAllCheck()">Pilih Semua</button>
+      <button class="clear-button" (click)="clearAllCheck()">Hapus Pilihan</button>
+    </div>
+    <div class="bill-summary" *ngIf="onGoingBills.length > 0">
+      <h3>Total Pembayaran: <span class="amount">Rp {{total| number}}</span></h3>
+      <button [disabled]="selected > 0? false : true" (click)="payButton()" id="pay-button" class="pay-button">Bayar Sekarang</button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedTab == 'Done'">
+    <div *ngIf="DoneBills.length === 0" class="no-bills-info">
+      <p>Tidak ada data riwayat pembayaran.</p>
+    </div>
+    <div class="bill-cards" *ngIf="DoneBills.length > 0">
+      <div *ngFor="let bill of DoneBills" class="bill-card" [ngClass]="getStatusClass(bill.status)">
+        <div class="bill-header">
+          <div class="bill-title">Periode: <strong>{{bill.month}} {{bill.year}}</strong></div>
+          <span *ngIf="bill.status === 'Telat'" class="late-badge">Telat {{bill.daysLate}} hari</span>
+        </div>
+        <div class="bill-details">
+          <div class="bill-amount">Total Tagihan: <span class="amount">Rp {{bill.amount|number}}</span></div>
+          <div class="bill-due">Jatuh Tempo: <span class="due-date">{{bill.dueDate}}</span></div>
+          <div class="bill-status">Status: <span [ngClass]="getStatusClass(bill.status)">{{bill.status === 'PAID' ? 'Sudah Dibayar' : bill.status}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+<p>Input snap token retrieved from step 1 (Backend), then click Pay.</p>
+<button id="pay-button">Pay! anjir</button>
+   <script type="text/javascript">
+  var payButton = document.getElementById('pay-button');
+  payButton.addEventListener('click', function() {
+  console.log('test')
+  snap.pay('e22d140a-acaf-47ac-ade3-c7ac13ac476a');
+  });
+</script> -->

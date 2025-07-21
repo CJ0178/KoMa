@@ -1,0 +1,112 @@
+### Login as owner
+# @name login
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner1@koma.com",
+  "password": "Bcabca01#"
+}
+@token = {{login.response.body.data}}
+
+###
+
+### Get all financials by property
+GET http://localhost:9090/financial/property/2
+Authorization: Bearer {{token}}
+
+###
+
+### Get all financials by year
+GET http://localhost:9090/financial/property/2/year?year=2025
+Authorization: Bearer {{token}}
+
+###
+
+### Get all financials by month
+GET http://localhost:9090/financial/property/2/month?year=2025&month=5
+Authorization: Bearer {{token}}
+
+###
+
+### Get all financials by day
+GET http://localhost:9090/financial/property/2/day?year=2025&month=5&day=17
+Authorization: Bearer {{token}}
+
+###
+
+### Get summary financials by property
+GET http://localhost:9090/financial/property/2/summary
+Authorization: Bearer {{token}}
+
+###
+
+### Get summary financials by year
+GET http://localhost:9090/financial/property/2/summary/year?year=2025
+Authorization: Bearer {{token}}
+
+###
+
+### Get summary financials by month
+GET http://localhost:9090/financial/property/2/summary/month?year=2025&month=5
+Authorization: Bearer {{token}}
+
+###
+
+### Get summary financials by day
+GET http://localhost:9090/financial/property/2/summary/day?year=2025&month=5&day=1
+Authorization: Bearer {{token}}
+
+###
+
+### Create a financial report
+POST http://localhost:9090/financial
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_id": 2,
+  "unit_id": 5,
+  "income": 1000000,
+  "expense": null,
+  "description": "Monthly rent income",
+  "date": "2025-05-01"
+}
+
+###
+
+### Create a financial report
+POST http://localhost:9090/financial
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_id": 2,
+  "unit_id": 5,
+  "income": null,
+  "expense": 200000,
+  "description": "Perbaikan unit",
+  "date": "2025-05-02"
+}
+
+###
+
+### Update a financial report
+PUT http://localhost:9090/financial/{id}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_id": 2,
+  "unit_id": 1,
+  "income": 1200000,
+  "expense": 600000,
+  "description": "Updated monthly rent income",
+  "date": "2025-05-01"
+}
+
+###
+
+### Delete a financial report
+DELETE http://localhost:9090/financial/{id}
+Authorization: Bearer {{token}}

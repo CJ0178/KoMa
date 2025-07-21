@@ -1,0 +1,165 @@
+<div class="registration-container">
+
+  <div class="register-header">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+    <h1 class="registration-title">Registrasi properti</h1>
+  </div>
+
+  <div class="registration-card">
+
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2 class="section-title">Informasi Properti</h2>
+
+        <div class="form-group">
+          <label for="propertyName">Nama Properti</label>
+          <input id="propertyName" type="text" formControlName="propertyName"
+                 placeholder="Masukkan nama properti">
+          <div *ngIf="propertyForm.get('propertyName')?.invalid && propertyForm.get('propertyName')?.touched"
+               class="error-message">
+            Nama properti wajib diisi
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="JenisProperti">Jenis Properti</label>
+          <select id="JenisProperti" formControlName="JenisProperti" class="styled-select">
+            <option value="" disabled selected>Pilih jenis properti</option>
+            <option *ngFor="let type of propertyTypes" [value]="type.value">{{ type.label }}</option>
+          </select>
+          <div *ngIf="propertyForm.get('JenisProperti')?.invalid && propertyForm.get('JenisProperti')?.touched"
+               class="error-message">
+            Jenis properti wajib dipilih
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="Deskripsi">Deskripsi</label>
+          <textarea id="Deskripsi" formControlName="Deskripsi" rows="4" placeholder="Masukkan deskripsi properti"></textarea>
+          <div *ngIf="propertyForm.get('Deskripsi')?.invalid && propertyForm.get('Deskripsi')?.touched"
+               class="error-message">
+            Deskripsi wajib diisi
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="LatLong">Lokasi Properti</label>
+          <div>
+
+          </div>
+          <app-map-popup (locationSelected)="onLocationSelected($event)"></app-map-popup>
+
+          <!-- <div *ngIf="selectedLocation" class="location-info">
+            <h3>Selected Location</h3>
+            <p>Latitude: {{ selectedLocation.lat | number:'1.4-4' }}</p>
+            <p>Longitude: {{ selectedLocation.lng | number:'1.4-4' }}</p>
+          </div> -->
+          <div *ngIf="propertyForm.get('LatLong')?.invalid && propertyForm.get('LatLong')?.touched"
+               class="error-message">
+            Lokasi Properti wajib diisi
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="propertyAddress">Alamat Detail Properti</label>
+          <textarea id="propertyAddress" formControlName="propertyAddress"
+                    placeholder="Masukkan alamat detail properti" rows="3"></textarea>
+          <div *ngIf="propertyForm.get('propertyAddress')?.invalid && propertyForm.get('propertyAddress')?.touched"
+               class="error-message">
+            Alamat detail properti wajib diisi
+          </div>
+        </div>
+
+
+
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Foto Thumbnail</h2>
+        <div class="file-upload-container">
+          <div class="file-drop-area"
+               [class.dragover]="isDragging"
+               (drop)="onThumbnailFileDrop($event)"
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave()">
+            <input type="file" id="thumbnailPhoto" (change)="onThumbnailFileSelected($event)" accept="image/*" hidden>
+            <label for="thumbnailPhoto" class="upload-label">
+              <span *ngIf="!thumbnailFile">Drag & drop photo here or click to browse</span>
+              <span *ngIf="thumbnailFile" class="file-name">{{thumbnailFile.name}}</span>
+            </label>
+          </div>
+          <div *ngIf="thumbnailPreview" class="image-preview">
+            <div class="thumbnail-preview-wrapper">
+              <img [src]="thumbnailPreview" alt="Thumbnail preview">
+              <div class="delete-btn-container">
+                <button type="button" class="delete-image-btn" (click)="removeThumbnail()">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Upload Foto Properti</h2>
+        <div class="file-upload-container">
+          <div class="file-drop-area"
+               [class.dragover]="isDragging"
+               (drop)="onPropertyFilesDrop($event)"
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave()">
+            <input type="file" id="propertyPhotos" (change)="onPropertyFilesSelected($event)" accept="image/*" multiple hidden>
+            <label for="propertyPhotos" class="upload-label">
+              <span *ngIf="!propertyFiles || propertyFiles.length === 0">Drag & drop photo here or click to browse</span>
+              <span *ngIf="propertyFiles && propertyFiles.length > 0" class="file-name">{{propertyFiles.length}} file(s) selected</span>
+            </label>
+          </div>
+          <div *ngIf="propertyPreviews && propertyPreviews.length > 0" class="image-preview">
+            <div class="property-preview-wrapper" *ngFor="let img of propertyPreviews; let i = index">
+              <img [src]="img" alt="Property preview">
+              <div class="delete-btn-container">
+                <button type="button" class="delete-image-btn" (click)="removePropertyImage(i)">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Fasilitas Properti</h2>
+        <div class="facility-list">
+          <div *ngFor="let category of facilityCategories">
+            <h3>{{ category }}</h3>
+            <div class="facility-category">
+              <button type="button" *ngFor="let fac of groupedFacilities[category]" (click)="addFacilityFromList(fac)" [disabled]="isFacilitySelected(fac.id)" class="facility-btn">
+                {{ fac.facility_name }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="selected-facilities" *ngIf="facilities.length > 0">
+          <div *ngFor="let fac of facilities.controls; let i = index" class="selected-facility-row">
+            <div class="facility-info">
+              <div class="facility-fields">
+                <span class="facility-name">{{ fac.value.facility_name }}</span>
+                <input type="number" min="1" [formControl]="getQuantityControl(fac)" class="facility-quantity" placeholder="Jumlah">
+                <input type="text" placeholder="Catatan" [formControl]="getNotesControl(fac)" class="facility-notes">
+              </div>
+              <button type="button" (click)="removeFacility(i)" class="remove-facility-btn">Hapus</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{propertyForm.valid}}
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="propertyForm.invalid || !selectedFile">
+          Register Property
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+### Login as occupant
+# @name login
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "penghuni1@koma.com",
+  "password": "Bcabca01#"
+}
+@token = {{login.response.body.data}}
+
+###
+
+### Get all bookings by property
+GET http://localhost:9090/billing/property/2
+Authorization: Bearer {{token}}
+
+###
+
+### Get all bookings by occupant
+GET http://localhost:9090/billing/occupant
+Authorization: Bearer {{token}}
+
+###
+
+### Get booking detail by ID
+GET http://localhost:9090/billing/2
+Authorization: Bearer {{token}}
+
+###
+
+### Create a booking
+POST http://localhost:9090/billing
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "unit_id": 5
+}
+
+###
+
+### Login as pemilik
+# @name loginPemilik
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner1@koma.com",
+  "password": "Bcabca01#"
+}
+@tokenPemilik = {{loginPemilik.response.body.data}}
+
+### Approve or reject a booking
+PUT http://localhost:9090/billing/2/approval
+Authorization: Bearer {{tokenPemilik}}
+Content-Type: application/json
+
+{
+  "decision": "APPROVE",
+  "remarks": "Approved for payment"
+}
+
+###
+
+### Make a booking payment
+PUT http://localhost:9090/billing/2/payment
+Authorization: Bearer {{token}}
+
+###
+
+### Pay single monthly bills
+PUT http://localhost:9090/billing/monthly/bill/payment?id=3
+Authorization: Bearer {{token}}
+
+###
+
+### Pay multiple monthly bills
+PUT http://localhost:9090/billing/monthly/bill/payment?id=4&id=5
+Authorization: Bearer {{token}}
+
+###
+
+### Update Midtrans status
+PUT http://localhost:9090/billing/midtrans/status?order_id=ORDER123&transaction_status=settlement
+Authorization: Bearer {{token}}

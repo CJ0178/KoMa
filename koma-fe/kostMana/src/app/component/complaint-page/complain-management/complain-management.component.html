@@ -1,0 +1,62 @@
+<div class="complaint-container">
+  <h1 class="page-title">Laporan Keluhan</h1>
+
+  <!-- Loading Overlay Component -->
+  <app-loading-overlay *ngIf="isLoading"></app-loading-overlay>
+
+  <div class="complaint-list">
+    <div *ngFor="let item of complaints" class="forum-thread">
+      <div (click)="getComplaintDetail(item.id)" class="complaint-item forum-card">
+        <span class="forum-status-badge badge-floating" [ngClass]="{
+          'badge-menunggu': item.status === 'MENUNGGU_TANGGAPAN',
+          'badge-dikerjakan': item.status === 'MASIH_DIKERJAKAN',
+          'badge-selesai': item.status === 'SELESAI'
+        }">
+          {{
+            item.status === 'MENUNGGU_TANGGAPAN' ? 'Menunggu Tanggapan' :
+            item.status === 'MASIH_DIKERJAKAN' ? 'Masih Dikerjakan' :
+            item.status === 'SELESAI' ? 'Selesai' : item.status
+          }}
+        </span>
+        <div class="forum-header">
+          <div class="forum-avatar">
+            <ng-container *ngIf="item.complainer_detail as complainer">
+              <img
+                [src]="complainer.profile_picture ? complainer.profile_picture : 'https://ui-avatars.com/api/?name=' + (complainer.name ? complainer.name : 'User') + '&background=fff&color=4f5d75&size=128'"
+                alt="Avatar"
+                class="profile-avatar"
+              />
+            </ng-container>
+            <ng-container *ngIf="!item.complainer_detail">
+              <img
+                src="https://ui-avatars.com/api/?name=User&background=fff&color=4f5d75&size=128"
+                alt="Avatar"
+                class="profile-avatar"
+              />
+            </ng-container>
+          </div>
+          <div class="forum-meta">
+            <span class="forum-author">{{item.complainer_detail?.name || '-'}}</span>
+            <span class="forum-date">{{item.date_create | date:'medium'}}</span>
+          </div>
+        </div>
+        <div class="forum-content">
+          <h2 class="forum-title">{{item.title}}</h2>
+          <div class="forum-description">{{item.description}}</div>
+          <div class="forum-photos" *ngIf="item.photos?.length">
+            <div class="forum-photo-list">
+              <img *ngFor="let photo of item.photos" [src]="photo.file_path" alt="Foto Keluhan" class="forum-photo-thumb" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+
+  <!-- Add New Complaint Button -->
+  <button *ngIf="user?.role_id === 4" (click)="goToCreateComplaint()" mat-raised-button color="primary" class="add-button">
+  Tambah Keluhan Baru
+  </button>
+</div>
+
+<!-- Style sudah dipindahkan ke file CSS khusus -->

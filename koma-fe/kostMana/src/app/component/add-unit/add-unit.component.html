@@ -1,0 +1,138 @@
+<div class="registration-container">
+
+  <div class="register-header">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+    <h1 class="registration-title">Registrasi Unit</h1>
+  </div>
+
+  <div class="registration-card">
+
+    <form [formGroup]="unitForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2 class="section-title">Informasi Unit</h2>
+
+        <!-- <div class="form-group">
+          <label for="property_id">ID Properti</label>
+          <input id="property_id" type="number" formControlName="property_id" placeholder="Masukkan ID properti">
+        </div> -->
+        <div class="form-group">
+          <label for="unit_name">Nama Unit</label>
+          <input id="unit_name" type="text" formControlName="unit_name" placeholder="Masukkan nama unit">
+        </div>
+        <div class="form-group">
+          <label for="price">Harga</label>
+          <input id="price" type="number" formControlName="price" placeholder="Masukkan harga">
+        </div>
+        <div class="form-group">
+          <label for="unit_width">Lebar Unit (m)</label>
+          <input id="unit_width" type="number" formControlName="unit_width" placeholder="Masukkan lebar unit">
+        </div>
+        <div class="form-group">
+          <label for="unit_height">Panjang Unit (m)
+          </label>
+          <input id="unit_height" type="number" formControlName="unit_height" placeholder="Masukkan panjang unit">
+        </div>
+        <div class="form-group">
+          <label for="unit_capacity">Kapasitas Unit</label>
+          <input id="unit_capacity" type="number" formControlName="unit_capacity" placeholder="Masukkan kapasitas unit">
+        </div>
+        <div class="form-group">
+          <label for="available">Tipe Kasur</label>
+          <select id="bed_type_id" formControlName="bed_type_id" class="styled-select">
+            <option value="" disabled selected>Pilih tipe kasur</option>
+            <option *ngFor="let type of bedTypes" [value]="type.id">{{ type.facility_name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="unit_width">Lantai</label>
+          <input id="unit_width" type="number" formControlName="floor" placeholder="Masukkan lebar unit">
+        </div>
+        <!-- <div class="form-group">
+          <label for="promo_price">Harga Promo</label>
+          <input id="promo_price" type="number" formControlName="promo_price" placeholder="Masukkan harga promo (opsional)">
+        </div> -->
+        <div class="form-group">
+          <label for="deposit_fee">Deposit</label>
+          <input id="deposit_fee" type="number" formControlName="deposit_fee" placeholder="Masukkan deposit (opsional)">
+        </div>
+        <div class="form-group">
+          <label for="description">Deskripsi</label>
+          <textarea id="description" formControlName="description" rows="4" placeholder="Masukkan deskripsi unit"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="available">Tersedia</label>
+          <select id="available" formControlName="available">
+            <option [value]="true">Ya</option>
+            <option [value]="false">Tidak</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Section Fasilitas -->
+      <div class="form-section">
+        <h2 class="section-title">Fasilitas Unit</h2>
+        <div class="facility-list-section">
+          <div *ngFor="let category of facilityCategories | keyvalue">
+            <h3 class="facility-category">{{category.key}}</h3>
+            <div class="facility-list-row">
+              <button type="button" class="facility-add-btn" *ngFor="let fac of category.value" (click)="onFacilityAdd(fac)" [disabled]="isFacilitySelected(fac.id)">
+                {{fac.facility_name}}
+              </button>
+            </div>
+          </div>
+          <div formArrayName="facilities" class="facility-selected-list">
+            <div *ngIf="facilities.controls.length === 0" class="facility-empty">
+              <em>Belum ada fasilitas dipilih.</em>
+            </div>
+            <div *ngFor="let facilityCtrl of facilities.controls; let i = index" [formGroupName]="i" class="facility-row facility-selected-row">
+              <span class="facility-name">{{facilityCtrl.value.facility_name}}</span>
+              <input type="number" min="1" class="facility-qty-dialog" placeholder="Qty"
+                formControlName="quantity" />
+              <input type="text" class="facility-notes-dialog" placeholder="Catatan"
+                formControlName="notes" />
+              <button type="button" class="remove-facility-btn" (click)="removeFacility(i)">
+                <span>&#10006;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Upload Foto Unit -->
+      <div class="form-section">
+        <h2 class="section-title">Foto Unit</h2>
+        <div class="file-upload-container">
+          <div class="file-drop-area"
+               [class.dragover]="isDragging"
+               (drop)="onFilesDrop($event)"
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave()">
+            <input type="file" id="unitPhotos" (change)="onFilesSelected($event)" accept="image/*" multiple hidden>
+            <label for="unitPhotos" class="upload-label">
+              <span *ngIf="!unitFiles || unitFiles.length === 0">Drag & drop photo here or click to browse</span>
+              <span *ngIf="unitFiles && unitFiles.length > 0" class="file-name">{{unitFiles.length}} file(s) selected</span>
+            </label>
+          </div>
+          <div *ngIf="imagePreviews && imagePreviews.length > 0" class="image-preview">
+            <ng-container *ngFor="let img of imagePreviews; let i = index">
+              <div class="preview-item">
+                <img [src]="img" alt="Preview">
+                <button type="button" class="remove-btn" (click)="removeImage(i)">×</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="unitForm.invalid">
+          Register Unit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

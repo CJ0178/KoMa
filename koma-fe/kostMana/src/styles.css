@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:500,700");
+@import "@angular/cdk/overlay-prebuilt";
+
+:root {
+  --color-primary: #2C3E50;
+  --color-accent: #F4C542;
+  --color-bg: #F5F7FA;
+  --color-dark: #2F2F2F;
+  --color-muted: #6C757D;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+.ks-modal-gallery-backdrop {
+          background: #000 !important;;
+          opacity: 0.85 !important;;
+}
+.ks-modal-gallery-panel {
+          z-index: 90000 !important;
+}
+
+html, body{
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat';
+}
+body { margin: 0 ; font-family: 'Montserrat', sans-serif; }
+* {
+  font-family: inherit;
+}

@@ -1,0 +1,248 @@
+.complaint-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-dark);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+}
+
+h2 {
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-muted);
+  border-radius: 6px;
+  font-size: 16px;
+  background: var(--color-bg);
+  color: var(--color-dark);
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.character-counter {
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+
+.file-upload-container {
+  margin-top: 8px;
+}
+
+.file-upload-container input[type="file"] {
+  display: none;
+}
+
+.file-upload-label {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: var(--color-bg);
+  border: 1px dashed var(--color-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: all 0.3s;
+}
+
+.file-upload-label:hover {
+  background-color: var(--color-accent);
+  color: var(--color-dark);
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.preview-item {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.preview-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--color-muted);
+}
+
+.remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 25px;
+  height: 25px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(244, 197, 66, 0.12);
+}
+
+.submit-btn {
+  width: auto;
+  min-width: 120px;
+  padding: 8px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.12);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: var(--color-accent);
+  color: var(--color-dark);
+  box-shadow: 0 4px 16px rgba(244, 197, 66, 0.18);
+}
+
+.submit-btn:disabled {
+  background-color: var(--color-muted);
+  color: var(--color-bg);
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: var(--color-accent);
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.back-btn {
+  margin-bottom: 18px;
+  margin-top: 8px;
+  margin-left: 18px;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(45deg, var(--color-primary), #414c5d, var(--color-primary));
+  color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.12);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.back-btn:hover, .back-btn:focus {
+  background-position: right center;
+  color: var(--color-bg);
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.back-btn-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* Tambahkan di bagian paling bawah file CSS terkait, misal create-complaint.component.css */
+.custom-select-wrapper {
+  width: 100%;
+}
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  box-sizing: border-box;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  transition: border-color 0.2s;
+}
+.custom-select:focus {
+  border-color: #6c63ff;
+  outline: none;
+}
+
+/* Agar konsisten dengan input dan textarea */
+.form-group input,
+.form-group textarea,
+.form-group .custom-select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .complaint-container {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .complaint-container {
+    padding: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  input[type="text"],
+  textarea,
+  .file-upload-label,
+  .submit-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}

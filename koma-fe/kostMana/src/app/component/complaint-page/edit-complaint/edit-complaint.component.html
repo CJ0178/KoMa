@@ -1,0 +1,97 @@
+<div class="complaint-container">
+  <!-- Tombol kembali -->
+  <div class="back-btn-wrapper">
+    <button class="gradient-button back-btn" type="button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+  </div>
+
+  <h2>Edit Laporan Keluhan</h2>
+
+  <form [formGroup]="complaintForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="property_id">Pilih Properti</label>
+      <div class="custom-select-wrapper">
+        <select id="property_id" formControlName="property_id" #propertySelect (change)="onPropertyChange(+propertySelect.value)" class="custom-select">
+          <option value="" disabled selected>Pilih Properti</option>
+          <option *ngFor="let property of userProperties" [value]="property.id">
+            {{property.property_name}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="unit_id">Pilih Unit</label>
+      <div class="custom-select-wrapper">
+        <select id="unit_id" formControlName="unit_id" class="custom-select">
+          <option value="" selected>Tanpa Unit</option>
+          <option *ngFor="let unit of units" [value]="unit.id">
+            {{unit.unit_name}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="title">Judul Laporan Keluhan (wajib)</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Masukkan judul keluhan"
+        maxlength="30"
+      >
+      <div class="character-counter">{{ complaintForm.get('title')?.value?.length || 0 }}/30</div>
+      <div *ngIf="complaintForm.get('title')?.invalid && complaintForm.get('title')?.touched" class="error-message">
+        Judul keluhan wajib diisi
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Deskripsikan keluhan (Max 250 huruf)</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Jelaskan keluhan Anda secara detail"
+        maxlength="250"
+        rows="4"
+      ></textarea>
+      <div class="character-counter">{{ complaintForm.get('description')?.value?.length || 0 }}/250</div>
+    </div>
+
+    <div class="form-group">
+      <label for="photo">Upload foto keluhan</label>
+      <div class="file-upload-container">
+        <input
+          type="file"
+          id="photo"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          multiple
+        >
+        <label for="photo" class="file-upload-label">
+          <span *ngIf="!selectedFiles || selectedFiles.length === 0">Pilih File</span>
+          <span *ngIf="selectedFiles && selectedFiles.length > 0">{{ selectedFiles.length }} file dipilih</span>
+        </label>
+      </div>
+      <div *ngIf="previewUrls && previewUrls.length" class="image-preview">
+        <ng-container *ngFor="let url of previewUrls; let i = index">
+          <div class="preview-item">
+            <img [src]="url" alt="Preview">
+            <button type="button" class="remove-btn" (click)="removeImage(i)">×</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="form-actions" style="display: flex; justify-content: flex-end;">
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="complaintForm.invalid || isSubmitting"
+      >
+        <span *ngIf="!isSubmitting">Simpan Perubahan</span>
+        <span *ngIf="isSubmitting">Menyimpan...</span>
+      </button>
+    </div>
+  </form>
+</div>

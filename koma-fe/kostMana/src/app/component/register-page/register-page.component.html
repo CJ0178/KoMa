@@ -1,0 +1,113 @@
+<div class="register-container">
+  <div class="register-header">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+    <h1 class="register-title">Registrasi Akun</h1>
+  </div>
+
+  <div class="register-form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Name Field -->
+        <div class="form-field">
+          <label for="name">Nama Lengkap</label>
+          <input id="name" type="text" formControlName="UserName" [class.invalid]="form.get('UserName')?.invalid && form.get('UserName')?.touched">
+          <div *ngIf="form.get('UserName')?.invalid && form.get('UserName')?.touched" class="error-message">
+            Nama wajib diisi
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-field">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" formControlName="Email" [class.invalid]="form.get('Email')?.invalid && form.get('Email')?.touched">
+          <div *ngIf="form.get('Email')?.invalid && form.get('Email')?.touched" class="error-message">
+            <span *ngIf="form.get('Email')?.errors?.['required']">Email wajib diisi</span>
+            <span *ngIf="form.get('Email')?.errors?.['email']">Format email tidak valid</span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="Role">Peran</label>
+          <select id="Role" formControlName="Role" [class.invalid]="form.get('Role')?.invalid && form.get('Role')?.touched" (change)="CekRole(getSelectValue($event))">
+            <option *ngFor="let g of RoleOption" [value]="g.value">{{ g.label }}</option>
+          </select>
+          <div *ngIf="form.get('Role')?.invalid && form.get('Role')?.touched" class="error-message">
+            Peran wajib dipilih
+          </div>
+        </div>
+
+        <!-- Phone Field -->
+        <div class="form-field">
+          <label for="phone">Nomor Telp</label>
+          <input id="phone" type="tel" formControlName="TelNum" placeholder="Contoh: +6281234567890"
+                 [class.invalid]="TelNum?.invalid && TelNum?.touched">
+          <div *ngIf="TelNum?.invalid && TelNum?.touched" class="error-message">
+            <div *ngIf="TelNum?.errors?.['required']">Nomor HP wajib diisi</div>
+            <div *ngIf="TelNum?.errors?.['pattern']">Format nomor tidak valid</div>
+          </div>
+        </div>
+
+        <!-- Birth Date Field -->
+        <div class="form-field">
+          <label for="birthDate">Tanggal Lahir</label>
+          <input id="birthDate" type="date" formControlName="birthDate"
+                 [class.invalid]="form.get('birthDate')?.invalid && form.get('birthDate')?.touched">
+          <div *ngIf="form.get('birthDate')?.invalid && form.get('birthDate')?.touched" class="error-message">
+            Tanggal lahir wajib diisi
+          </div>
+        </div>
+
+        <!-- Gender Field -->
+        <div class="form-field">
+          <label for="gender">Jenis Kelamin</label>
+          <select id="gender" formControlName="gender" [class.invalid]="form.get('gender')?.invalid && form.get('gender')?.touched">
+            <option *ngFor="let g of genders" [value]="g.value">{{ g.label }}</option>
+          </select>
+          <div *ngIf="form.get('gender')?.invalid && form.get('gender')?.touched" class="error-message">
+            Jenis kelamin wajib dipilih
+          </div>
+        </div>
+
+
+        <!-- Password Field -->
+        <div class="form-field">
+          <label for="password">Kata Sandi</label>
+          <input id="password" type="password" formControlName="password"
+                 [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched">
+          <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="error-message">
+            Password harus terdiri dari minimal 8 karakter, mengandung huruf besar, huruf kecil, angka dan simbol.
+          </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-field">
+          <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+          <input id="confirmPassword" formControlName="confirmPassword" type="password"
+                 [class.invalid]="form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched">
+          <div *ngIf="form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched" class="error-message">
+            Password tidak cocok
+          </div>
+        </div>
+
+      <div *ngIf="ispenjaga" class="form-field">
+          <label for="KostJaga">Kost yang Dijaga</label>
+          <select id="KostJaga" formControlName="KostJaga" [class.invalid]="form.get('KostJaga')?.invalid && form.get('KostJaga')?.touched">
+            <option *ngFor="let g of KostList" [value]="g.id">{{ g.label }}</option>
+          </select>
+          <div *ngIf="form.get('KostJaga')?.invalid && form.get('KostJaga')?.touched" class="error-message">
+            Pilih kost yang akan dijaga
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button class="submit-button" type="submit" [disabled]="form.invalid">
+          Registrasi
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="dialog-container">
+  <button class="close-button" (click)="close()">✕</button>
+
+  <h2>Sebarkan Unit dan Dapatkan Poin!!</h2>
+
+  <p>
+    Mulai sebarkan unit dan ajak teman mu untuk mendapatkan poin, setiap teman yang
+    booking dengan link kamu, akan memberi kamu poin yang dapat kamu pakai pada fitur pembayaran
+  </p>
+
+  <p>
+    Tunggu apa lagi, ayo sebarkan link dibawah ke teman teman mu dan dapatkan poin nya!!
+  </p>
+
+  <div class="link-box">
+    <input [value]="shareLink" readonly />
+    <button (click)="copyLink()">
+      <svg fill="#000000" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M21,10V20a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V10a1,1,0,0,1,1-1H20A1,1,0,0,1,21,10ZM6,14H5V5h9V6a1,1,0,0,0,2,0V4a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V15a1,1,0,0,0,1,1H6a1,1,0,0,0,0-2Z"></path></g></svg>
+    </button>
+  </div>
+</div>
+

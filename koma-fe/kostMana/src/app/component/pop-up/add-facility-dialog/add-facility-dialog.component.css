@@ -1,0 +1,198 @@
+/* Facility dialog styling to match register-property section */
+.facility-list-section {
+  margin-bottom: 16px;
+}
+.facility-category {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.facility-list-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+button[mat-stroked-button] {
+  background: var(--color-bg);
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 15px;
+  color: var(--color-primary);
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+button[mat-stroked-button]:hover:not(:disabled) {
+  background: #e0e7ef;
+  color: var(--color-dark);
+}
+button[mat-stroked-button]:disabled {
+  background: #e0e7ef;
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.facility-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 8px 0;
+}
+.facility-selected-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  background: var(--color-bg, #f7f7f7);
+  border-radius: 8px;
+  padding: 12px 8px;
+  box-sizing: border-box;
+}
+.facility-selected-row .facility-name {
+  flex: 1 1 120px;
+  min-width: 100px;
+  font-weight: 500;
+  margin-right: 8px;
+}
+.facility-selected-row .facility-qty-dialog,
+.facility-selected-row .facility-notes-dialog {
+  flex: 1 1 80px;
+  min-width: 60px;
+  max-width: 120px;
+}
+.facility-selected-row .remove-facility-btn {
+  flex: 0 0 auto;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .facility-selected-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .facility-selected-row .facility-name,
+  .facility-selected-row .facility-qty-dialog,
+  .facility-selected-row .facility-notes-dialog {
+    min-width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+  .facility-selected-row .remove-facility-btn {
+    align-self: flex-end;
+    margin-top: 4px;
+  }
+}
+.facility-name {
+  min-width: 120px;
+  max-width: 220px;
+  font-weight: 500;
+  color: var(--color-dark);
+  word-break: break-word;
+  white-space: normal;
+  flex: 1 1 220px;
+}
+.facility-qty-dialog {
+  width: 54px;
+  min-width: 54px;
+  flex: 0 0 54px;
+  padding: 4px 6px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #dbeafe;
+  text-align: center;
+  margin-right: 4px;
+  background: #fff;
+}
+.facility-notes-dialog {
+  width: 140px;
+  min-width: 100px;
+  flex: 1 1 140px;
+  padding: 4px 8px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #dbeafe;
+  background: #fff;
+}
+.remove-facility-btn {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: background 0.2s;
+}
+.remove-facility-btn:hover {
+  background: var(--color-accent)
+}
+.facility-selected-list {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.facility-empty {
+  color: var(--color-muted);
+  font-size: 15px;
+  text-align: center;
+  padding: 12px 0;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+.submit-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.submit-btn:disabled {
+  background: #e0e7ef;
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.cancel-btn {
+  background: #fff;
+  color: var(--color-primary);
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cancel-btn:hover {
+  background: #f0f4fa;
+}
+.cdk-dialog-container, .mat-dialog-container, .add-facility-dialog-content {
+  padding: 28px 24px 24px 24px !important;
+  box-sizing: border-box;
+  max-width: 800px;
+  width: 100% !important;
+  max-height: 80vh;
+  overflow-y: auto;
+}

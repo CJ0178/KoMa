@@ -1,0 +1,21 @@
+<div class="profile-container">
+  <h2>Profil Pengguna</h2>
+  <div *ngIf="user; else notLoggedIn">
+    <img *ngIf="user.profile_picture" [src]="user.profile_picture" class="profile-avatar" alt="User Avatar" />
+    <img *ngIf="!user.profile_picture" src="https://ui-avatars.com/api/?name={{user.name}}&background=4f5d75&color=fff" class="profile-avatar" alt="User Avatar" />
+    <p><strong>Nama:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Role:</strong> {{ getRoleName(user.role_id) }}</p>
+    <p><strong>No. HP:</strong> {{ user.phone_number }}</p>
+    <p><strong>Tanggal Lahir:</strong> {{ user.date_of_birth }}</p>
+    <p><strong>Point Akumulasi:</strong> {{ user.accumulated_point }}</p>
+    <div class="profile-actions">
+      <button class="edit-profile-btn" (click)="openEditProfileDialog()">Edit Profil</button>
+      <button class="change-password-btn" (click)="openChangePasswordDialog()">Ganti Password</button>
+    </div>
+  </div>
+  <ng-template #notLoggedIn>
+    <p>Anda belum login.</p>
+  </ng-template>
+
+</div>

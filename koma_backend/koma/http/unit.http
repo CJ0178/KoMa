@@ -1,0 +1,101 @@
+### Login as owner
+# @name login
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner1@koma.com",
+  "password": "Bcabca01#"
+}
+@token = {{login.response.body.data}}
+
+###
+
+### Get all units
+GET http://localhost:9090/unit
+Authorization: Bearer {{token}}
+
+###
+
+### Get unit by ID
+GET http://localhost:9090/unit/1
+Authorization: Bearer {{token}}
+
+###
+
+### Create a new unit
+POST http://localhost:9090/unit
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_id": 2,
+  "unit_name": "Unit A",
+  "price": 5000000,
+  "unit_width": 5.0,
+  "unit_height": 4.0,
+  "description": "Spacious unit with great lighting",
+  "available": true,
+  "keeper_id": 3,
+  "promo_price": 4500000,
+  "deposit_fee": 1000000,
+  "unit_capacity": 2,
+  "occupant_id": 2,
+  "photos": [
+    {
+      "photo_url": "http://example.com/photo1.jpg"
+    }
+  ],
+  "facilities": [
+    {
+      "facility_category_id": 1,
+      "quantity": 10,
+      "notes": "Some notes"
+    }
+  ]
+}
+
+###
+
+### Update an existing unit
+PUT http://localhost:9090/unit/update/5
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_id": 1,
+  "unit_name": "Updated Unit A",
+  "price": 5500000,
+  "unit_width": 5.5,
+  "unit_height": 4.5,
+  "description": "Updated description for the unit",
+  "available": true,
+  "keeper_id": 4,
+  "promo_price": 5000000,
+  "deposit_fee": 1200000,
+  "unit_capacity": 3,
+  "occupant_id": 3,
+  "photos": [
+    {
+      "photo_url": "http://example.com/photo2.jpg"
+    }
+  ],
+  "facilities": [
+    {
+      "facility_category_id": 1,
+      "quantity": 10,
+      "notes": "Some notes"
+    },
+    {
+      "facility_category_id": 2,
+      "quantity": 7,
+      "notes": "Some notes"
+    }
+  ]
+}
+
+###
+
+### Delete a unit
+DELETE http://localhost:9090/unit/delete/{id}
+Authorization: Bearer {{token}}

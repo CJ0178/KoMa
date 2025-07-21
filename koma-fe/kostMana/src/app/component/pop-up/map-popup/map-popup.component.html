@@ -1,0 +1,25 @@
+<!-- location-picker.component.html -->
+<div class="location-picker">
+  <div class="search-container">
+    <input
+      #searchInput
+      type="text"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchLocation()"
+      placeholder="Temukan lokasi">
+    <button (click)="searchLocation()">Search</button>
+  </div>
+
+  <div #mapContainer pos class="map"></div>
+
+  <div class="location-info" *ngIf="coordinates">
+    <div class="address" *ngIf="coordinates.address">
+      <i class="material-icons">place</i>
+      {{ coordinates.address }}
+    </div>
+    <div class="coordinates">
+      <span>Lat: {{ coordinates.lat | number:'1.4-4' }}</span>
+      <span>Lng: {{ coordinates.lng | number:'1.4-4' }}</span>
+    </div>
+  </div>
+</div>

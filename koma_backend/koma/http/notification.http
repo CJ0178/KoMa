@@ -1,0 +1,81 @@
+### Login as user
+# @name login
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner1@koma.com",
+  "password": "Bcabca01#"
+}
+@token = {{login.response.body.data}}
+
+###
+
+### Get all notifications by property ID
+GET http://localhost:9090/notification/property/2
+Authorization: Bearer {{token}}
+
+###
+
+### Get all notifications by user ID
+GET http://localhost:9090/notification/user
+Authorization: Bearer {{token}}
+
+###
+
+### Get notification detail by ID
+GET http://localhost:9090/notification/1
+Authorization: Bearer {{token}}
+
+###
+
+### Create a notification
+POST http://localhost:9090/notification
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "user_id": 7,
+  "billing_id": 2,
+  "notification_category": "BILLING",
+  "content": "Your billing is due in 7 days."
+}
+
+###
+
+### Update a notification
+PUT http://localhost:9090/notification/3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "user_id": 7,
+  "billing_id": 2,
+  "notification_category": "BILLING",
+  "content": "Updated notification content."
+}
+
+###
+
+### Delete a notification
+DELETE http://localhost:9090/notification/{id}
+Authorization: Bearer {{token}}
+
+###
+
+### Login as admin
+# @name loginAdmin
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin1@koma.com",
+  "password": "Bcabca01#"
+}
+@tokenAdmin = {{loginAdmin.response.body.data}}
+
+###
+
+### Send pending bill reminders
+POST http://localhost:9090/notification/reminder
+Authorization: Bearer {{tokenAdmin}}

@@ -1,0 +1,45 @@
+<div class="add-facility-dialog-content">
+  <h2>Tambah Fasilitas</h2>
+  <!-- Existing Facilities Section -->
+  <div *ngIf="existingFacilities.length > 0" class="existing-facility-list">
+    <h3 class="facility-category">Fasilitas Sudah Terdaftar</h3>
+    <div class="facility-list-row">
+      <div class="existing-facility-card" *ngFor="let fac of existingFacilities">
+        <span class="facility-name">{{ fac.facility_name }}</span>
+        <span *ngIf="fac.quantity" class="facility-qty">({{ fac.quantity }})</span>
+        <span *ngIf="fac.notes" class="facility-notes">- {{ fac.notes }}</span>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="facilityForm" (ngSubmit)="onSubmit()">
+    <div class="facility-list-section">
+      <div *ngFor="let category of (groupedFacilities | keyvalue)">
+        <h3 class="facility-category">{{category.key.replace('PROPERTY_', '')}}</h3>
+        <div class="facility-list-row">
+          <button mat-stroked-button type="button" *ngFor="let fac of category.value" (click)="addFacilityFromList(fac)" [disabled]="isFacilitySelected(fac.id)">
+            {{fac.facility_name}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div formArrayName="facilities" class="facility-selected-list">
+      <div *ngIf="facilities.controls.length === 0 && existingFacilities.length === 0" class="facility-empty">
+        <em>Belum ada fasilitas dipilih.</em>
+      </div>
+      <div *ngFor="let facility of facilities.controls; let i = index" [formGroupName]="i" class="facility-row facility-selected-row">
+        <span class="facility-name">{{facility.value.facility_name}}</span>
+        <input type="number" min="1" class="facility-qty-dialog" placeholder="Qty" formControlName="quantity" />
+        <input type="text" class="facility-notes-dialog" placeholder="Catatan" formControlName="notes" />
+        <button type="button" class="remove-facility-btn" (click)="removeFacility(i)">
+          <span>&#10006;</span>
+        </button>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button class="submit-btn" type="submit" [disabled]="!facilityForm.valid || facilities.controls.length === 0">Simpan</button>
+      <button class="cancel-btn" type="button" (click)="onCancel()">Batal</button>
+    </div>
+  </form>
+</div>
+
+<!-- Styles moved to add-facility-dialog.component.css -->

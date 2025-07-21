@@ -1,0 +1,62 @@
+<div class="expense-form-container">
+  <h2>Tambahkan Detail Pengeluaran</h2>
+
+  <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Judul Pengeluaran</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Masukkan judul pengeluaran"
+        maxlength="30"
+      >
+      <div class="character-counter">{{ expenseForm.get('title')?.value?.length || 0 }}/30</div>
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Jumlah Pengeluaran</label>
+      <input
+        type="number"
+        id="amount"
+        formControlName="amount"
+        placeholder="Masukkan jumlah"
+        inputmode="numeric"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="description">Keterangan Pengeluaran</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Tambahkan keterangan (opsional)"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="form-group">
+      <label>Upload bukti pengeluaran (tidak wajib)</label>
+      <div class="file-upload">
+        <input
+          type="file"
+          id="receipt"
+          (change)="onFileSelected($event)"
+          accept="image/*,.pdf"
+          #fileInput
+        >
+        <button type="button" class="upload-button" (click)="fileInput.click()">Pilih File</button>
+        <span class="file-name">{{ selectedFile?.name || 'Belum ada file dipilih' }}</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()">Batal</button>
+      <button type="submit" class="submit-button" [disabled]="!expenseForm.valid">Simpan</button>
+    </div>
+  </form>
+</div>

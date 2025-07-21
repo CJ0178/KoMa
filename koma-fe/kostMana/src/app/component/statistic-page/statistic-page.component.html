@@ -1,0 +1,115 @@
+<div class="statistics-container">
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+  <div class="statistics-header">
+    <h1>Statistik</h1>
+  </div>
+  <div class="statistics-controls-row">
+    <div class="property-select-row">
+      <label for="propertySelect">Pilih Properti:</label>
+      <select id="propertySelect" #propertySelect [(ngModel)]="selectedPropertyId" (change)="onPropertyChange(+propertySelect.value)">
+        <option value="" disabled selected>Pilih Properti</option>
+        <option *ngFor="let property of properties" [value]="property.id">
+          {{property.property_name}}
+        </option>
+      </select>
+    </div>
+    <button class="filter-button" (click)="openFilterDialog()">
+      Terapkan Filter
+    </button>
+    <button class="add-financial-button" (click)="openAddIncomeDialog()">
+      Tambah Data Pemasukan
+    </button>
+    <button class="add-financial-button" (click)="openAddExpenseDialog()">
+      Tambah Data Pengeluaran
+    </button>
+  </div>
+  <div class="action-buttons">
+  </div>
+  <!-- Filter dialog (will be shown when filter button is clicked) -->
+  <div class="filter-dialog" *ngIf="showFilterDialog">
+    <div class="filter-content">
+      <h3>Filter Options</h3>
+      <div class="filter-section">
+        <div class="radio-group">
+          <label><input type="radio" name="filterType" [(ngModel)]="filterType" value="year"> By Tahun</label>
+          <label><input type="radio" name="filterType" [(ngModel)]="filterType" value="month"> By Bulan</label>
+          <label><input type="radio" name="filterType" [(ngModel)]="filterType" value="date"> By Tanggal</label>
+        </div>
+      </div>
+      <div class="filter-section" *ngIf="filterType === 'year'">
+        <label>Tahun
+          <input type="number" [(ngModel)]="filterYear" placeholder="Contoh: 2025">
+        </label>
+      </div>
+      <div class="filter-section" *ngIf="filterType === 'month'">
+        <div class="filter-month-row">
+          <label>Tahun
+            <input type="number" [(ngModel)]="filterYear" placeholder="Contoh: 2025">
+          </label>
+          <label>Bulan
+            <select [(ngModel)]="filterMonth">
+              <option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">{{m}}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="filter-section" *ngIf="filterType === 'date'">
+        <div class="filter-month-row">
+          <label>Tahun
+            <input type="number" [(ngModel)]="filterYear" placeholder="Contoh: 2025">
+          </label>
+          <label>Bulan
+            <select [(ngModel)]="filterMonth">
+              <option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">{{m}}</option>
+            </select>
+          </label>
+          <label>Tanggal
+            <select [(ngModel)]="filterDay">
+              <option *ngFor="let d of availableDays" [value]="d">{{d}}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button (click)="applyFilters()">Apply</button>
+        <button (click)="closeFilterDialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <button *ngIf="userRole === 'pemilik' && tableData && tableData.length" class="download-button" (click)="downloadTableAsPDF()">
+    Download
+  </button>
+
+  <div class="statistics-table" *ngIf="tableData && tableData.length" style="margin-bottom: 2rem;">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th *ngFor="let col of tableColumns">{{ col }}</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of tableData">
+          <td *ngFor="let col of tableColumns">
+            <!-- Tampilkan nama unit jika kolom Unit -->
+            <ng-container *ngIf="col === 'Unit'; else normalCell">
+              {{ getUnitName(row.unit_id) }}
+            </ng-container>
+            <ng-template #normalCell>{{ row[col] }}</ng-template>
+          </td>
+          <td>
+            <button class="edit-btn" (click)="onEditReport(row)"><mat-icon>edit</mat-icon></button>
+            <button class="delete-btn" (click)="onDeleteReport(row)"><mat-icon>delete</mat-icon></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="statistics-content">
+    <canvas #myChartCanvas id="MyChart" *ngIf="chartVisible" height="400"></canvas>
+    <canvas #barChartCanvas id="BarChart" *ngIf="chartVisible" height="400"></canvas>
+    <canvas #pieChartCanvas id="PieChart" *ngIf="chartVisible" height="400"></canvas>
+  </div>
+</div>

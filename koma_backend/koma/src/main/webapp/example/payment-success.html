@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Payment Success</title>
+  </head>
+  <body>
+    <h1>Payment Success</h1>
+    <p>Redirecting to success endpoint...</p>
+    <script type="text/javascript">
+      // Extract parameters from URL
+      const params = new URLSearchParams(window.location.search);
+      const data = {};
+      params.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      // Send data to the success endpoint
+      fetch('https://72e0-157-20-222-18.ngrok-free.app/billing/midtrans/status?'+params, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('Success:', result);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    </script>
+  </body>
+</html>

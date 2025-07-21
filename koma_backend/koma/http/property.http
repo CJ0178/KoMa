@@ -1,0 +1,70 @@
+### login as owner
+# @name login
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner1@koma.com",
+  "password": "Bcabca01#"
+}
+@token = {{login.response.body.data}}
+
+###
+
+### Get all properties
+GET http://localhost:9090/property
+Authorization: Bearer {{token}}
+
+###
+
+### Get all properties by owner ID
+GET http://localhost:9090/property/owner
+Authorization: Bearer {{token}}
+
+###
+
+### Get property details by ID
+GET http://localhost:9090/property/2
+Authorization: Bearer {{token}}
+
+###
+
+### Create a new property
+POST http://localhost:9090/property
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_name": "Property Name",
+  "address": "Property Address",
+  "city": "City Name",
+  "latitude": 12.345678,
+  "longitude": 98.765432,
+  "property_type": "Apartment",
+  "thumbnail_photo_path": "/path/to/thumbnail.jpg",
+  "description": "Property description"
+}
+
+###
+
+### Update a property by ID
+PUT http://localhost:9090/property/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "property_name": "Updated Property Name",
+  "address": "Updated Property Address",
+  "city": "Updated City Name",
+  "latitude": 12.345678,
+  "longitude": 98.765432,
+  "property_type": "Updated Apartment",
+  "thumbnail_photo_path": "/path/to/updated-thumbnail.jpg",
+  "description": "Updated property description"
+}
+
+###
+
+### Delete a property by ID
+DELETE http://localhost:9090/property/{id}
+Authorization: Bearer {{token}}

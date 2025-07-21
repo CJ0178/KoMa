@@ -1,0 +1,109 @@
+<div class="container">
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+  <div class="header">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+    <h2>{{ unitDetail?.unit_name || '-' }}</h2>
+  </div>
+
+  <div class="image-container-complete">
+      <div class="carousel-container">
+    <div class="carousel-wrapper" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+      <div class="carousel-slide" *ngFor="let img of images">
+        <img [src]="img" (click)="openModal(img)" alt="Carousel image" />
+      </div>
+    </div>
+
+    <button class="nav prev" (click)="prev()">‹</button>
+    <button class="nav next" (click)="next()">›</button>
+  </div>
+
+    <div class="gallery-container">
+    <div class="gallery-grid">
+      <img
+        *ngFor="let img of images | slice:1:4"
+        [src]="img"
+        (click)="openModal(img)"
+        alt="Room image"
+        class="gallery-img"
+      />
+    </div>
+  </div>
+  </div>
+  <div class="modal" *ngIf="selectedImage" (click)="closeModal()">
+    <img [src]="selectedImage" class="modal-img" alt=""/>
+  </div>
+
+  <div class="info">
+    <h3>Deskripsi</h3>
+    <div class="deskripsi-box">
+      <p [class.collapsed]="!isDescExpanded">
+        {{ unitDetail?.description || '-' }}
+      </p>
+      <div class="desc-toggle" (click)="isDescExpanded = !isDescExpanded">
+        <span>{{ isDescExpanded ? 'Tutup' : 'Lihat Selengkapnya' }}</span>
+      </div>
+    </div>
+    <p class="price">{{ unitDetail?.price ? ('Rp ' + (unitDetail.price | number:'1.0-0')) : '-' }}</p>
+    <div class="button-list" *ngIf="isPenghuni">
+      <button (click)="GamificationPopUp()" class="share-button">Sebarkan Unit</button>
+      <button *ngIf="allowBooking()" class="book-button" (click)="openBookingDialog()">Mulai Booking</button>
+    </div>
+    <!-- Button for owner to edit unit -->
+    <div class="button-list" *ngIf="isPemilikKos">
+      <button class="edit-unit-btn" (click)="openEditUnitDialog()">Edit Unit</button>
+      <button class="delete-unit-btn" (click)="deleteUnit()">Hapus Unit</button>
+    </div>
+
+    <div class="overall-grid">
+      <div class="details-grid" style="display: flex; gap: 32px;">
+      <div class="firstGrid">
+        <h4>Kapasitas Penghuni</h4>
+        <p>{{ unitDetail?.unit_capacity || '-' }}</p>
+        <h4>Luas Kamar</h4>
+        <p>{{ unitDetail?.unit_width && unitDetail?.unit_height ? (unitDetail.unit_width * unitDetail.unit_height) + ' m²' : '-' }}</p>
+      </div>
+      <div class="secondGrid">
+        <h4>Lantai</h4>
+        <p>{{ unitDetail?.floor || '-' }}</p>
+        <h4>Tipe Kasur</h4>
+        <p>{{ unitDetail?.bed_type_name || '-' }}</p>
+      </div>
+    </div>
+
+    <div class="facilities">
+      <ng-container *ngIf="unitDetail?.facilities && unitDetail.facilities.length > 0">
+        <div *ngFor="let category of getFacilityCategories(unitDetail.facilities)" class="facility-card">
+          <h4>
+            <span class="facility-icon">
+              {{ getFacilityIcon(category.category) }}
+            </span>
+            {{ category.category }}
+          </h4>
+          <ul>
+            <li *ngFor="let item of category.items">
+              {{ item.facility_name }}<span *ngIf="item.quantity"> ({{item.quantity}})</span><span *ngIf="item.notes"> - {{item.notes}}</span>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!unitDetail?.facilities || unitDetail.facilities.length === 0">
+        <div class="facility-card"><h4>Fasilitas</h4><ul><li>-</li></ul></div>
+      </ng-container>
+    </div>
+
+    <div class="contacts">
+      <h4>Kontak</h4>
+      <div class="contact-list">
+        <div class="contact-item" *ngFor="let contact of unitDetail?.contacts">
+          <mat-icon>call</mat-icon>
+          <p>{{ contact.name }}<br>{{ contact.phone }}</p>
+          <mat-icon class="copy-icon copy-btn" (click)="copyToClipboard(contact.phone)" title="Copy nomor telepon">content_copy</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>

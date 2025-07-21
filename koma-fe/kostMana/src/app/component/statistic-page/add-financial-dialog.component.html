@@ -1,0 +1,93 @@
+<div class="add-financial-container">
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+  <div class="header-row">
+    <button class="back-button" type="button" (click)="mode === 'edit' && dialogRef ? dialogRef.close() : onCancel()">
+      Kembali
+    </button>
+    <div class="header">
+      <h2>{{ mode === 'edit' ? 'Edit' : 'Tambah' }} Laporan Keuangan</h2>
+    </div>
+  </div>
+  <form [formGroup]="financialForm" (ngSubmit)="onSubmit()">
+    <div class="form-group full-width">
+      <label for="property_id">Pilih Properti</label>
+      <select id="property_id" formControlName="property_id" (change)="onPropertyChange($event.target)">
+        <option value="" disabled selected>Pilih Properti</option>
+        <option *ngFor="let property of properties" [value]="property.id">
+          {{property.property_name}}
+        </option>
+      </select>
+      <div class="error" *ngIf="financialForm.get('property_id')?.hasError('required') && (financialForm.get('property_id')?.touched || financialForm.get('property_id')?.dirty)">
+        Properti wajib dipilih
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="unit_id">Pilih Unit</label>
+      <select id="unit_id" formControlName="unit_id">
+        <option value="" disabled selected>Pilih Unit</option>
+        <option *ngFor="let unit of units" [value]="unit.id">
+          {{unit.unit_name}}
+        </option>
+      </select>
+      <div class="error" *ngIf="financialForm.get('unit_id')?.hasError('required') && (financialForm.get('unit_id')?.touched || financialForm.get('unit_id')?.dirty)">
+        Unit wajib dipilih
+      </div>
+    </div>
+
+    <div class="form-group full-width" *ngIf="type === 'income'">
+      <label for="nominalPemasukan">Nominal Pemasukan</label>
+      <input id="nominalPemasukan" type="number" formControlName="nominalPemasukan" placeholder="0" min="0">
+      <div class="error" *ngIf="financialForm.get('nominalPemasukan')?.hasError('required') && (financialForm.get('nominalPemasukan')?.touched || financialForm.get('nominalPemasukan')?.dirty)">
+        Nominal pemasukan wajib diisi
+      </div>
+    </div>
+
+    <div class="form-group full-width" *ngIf="type === 'expense'">
+      <label for="nominalPengeluaran">Nominal Pengeluaran</label>
+      <input id="nominalPengeluaran" type="number" formControlName="nominalPengeluaran" placeholder="0" min="0">
+      <div class="error" *ngIf="financialForm.get('nominalPengeluaran')?.hasError('required') && (financialForm.get('nominalPengeluaran')?.touched || financialForm.get('nominalPengeluaran')?.dirty)">
+        Nominal pengeluaran wajib diisi
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="deskripsi">Deskripsi</label>
+      <textarea id="deskripsi" formControlName="deskripsi" placeholder="Deskripsi"></textarea>
+      <div class="error" *ngIf="financialForm.get('deskripsi')?.hasError('required') && (financialForm.get('deskripsi')?.touched || financialForm.get('deskripsi')?.dirty)">
+        Deskripsi wajib diisi
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="tanggal">Tanggal</label>
+      <input id="tanggal" type="date" formControlName="tanggal" placeholder="Pilih tanggal">
+      <div class="error" *ngIf="financialForm.get('tanggal')?.hasError('required') && (financialForm.get('tanggal')?.touched || financialForm.get('tanggal')?.dirty)">
+        Tanggal wajib diisi
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="financialPhoto">Upload foto keuangan</label>
+      <div class="file-upload-container">
+        <label for="financialPhoto" class="file-upload-label">
+          <span *ngIf="!selectedFiles || selectedFiles.length === 0">Pilih File</span>
+          <span *ngIf="selectedFiles && selectedFiles.length > 0">{{ selectedFiles.length }} file dipilih</span>
+        </label>
+      </div>
+      <div *ngIf="previewUrls && previewUrls.length" class="image-preview">
+        <ng-container *ngFor="let url of previewUrls; let i = index">
+          <div class="preview-item">
+            <img [src]="url" alt="Preview">
+            <button type="button" class="remove-btn" (click)="removeImage(i)">×</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-btn" (click)="mode === 'edit' && dialogRef ? dialogRef.close() : onCancel()">Batal</button>
+      <button type="submit" class="save-btn" [disabled]="!financialForm.valid">Simpan</button>
+    </div>
+  </form>
+</div>

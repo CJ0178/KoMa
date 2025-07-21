@@ -1,0 +1,92 @@
+<div class="complaint-container">
+  <app-loading-overlay *ngIf="isLoading"></app-loading-overlay>
+  <div *ngIf="!isLoading && !isError && complaint">
+    <div class="back-btn-wrapper">
+      <button class="gradient-button back-btn" type="button" (click)="goBack()">
+        <span class="button-text">Kembali</span>
+      </button>
+    </div>
+    <h1 class="complaint-title">{{complaint.title}}</h1>
+
+    <div class="complaint-section">
+      <div class="complaint-meta" style="display: flex; align-items: center; gap: 12px;">
+        <div class="forum-avatar">
+          <ng-container *ngIf="complaint.complainer_detail as complainer">
+            <img *ngIf="complainer.profile_picture" [src]="complainer.profile_picture" alt="Avatar" />
+            <div *ngIf="!complainer.profile_picture" class="avatar-placeholder">
+              {{complainer.name ? complainer.name.charAt(0) : '?' }}
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!complaint.complainer_detail">
+            <div class="avatar-placeholder">?</div>
+          </ng-container>
+        </div>
+        <span class="complaint-date">{{complaint.date_create | date:'medium'}}</span>
+        <span class="complaint-divider"> | </span>
+        <span class="complaint-author">Oleh : {{complaint.complainer_detail?.name || '-'}}</span>
+        <span class="forum-status-badge" [ngClass]="{
+          'badge-menunggu': complaint.status === 'MENUNGGU_TANGGAPAN',
+          'badge-dikerjakan': complaint.status === 'MASIH_DIKERJAKAN',
+          'badge-selesai': complaint.status === 'SELESAI'
+        }">
+          {{
+            complaint.status === 'MENUNGGU_TANGGAPAN' ? 'Menunggu Tanggapan' :
+            complaint.status === 'MASIH_DIKERJAKAN' ? 'Masih Dikerjakan' :
+            complaint.status === 'SELESAI' ? 'Selesai' : complaint.status
+          }}
+        </span>
+        <ng-container *ngIf="canSetStatus">
+          <button *ngIf="complaint.status === 'MENUNGGU_TANGGAPAN'" class="status-action-btn" (click)="setOnProgress()">Kerjakan Perbaikan</button>
+          <button *ngIf="complaint.status === 'MASIH_DIKERJAKAN'" class="status-action-btn" (click)="setDone()">Selesaikan Keluhan</button>
+        </ng-container>
+        <ng-container *ngIf="canEdit">
+          <button class="edit-btn" (click)="openEditDialog()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="delete-btn" (click)="openDeleteDialog()">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="complaint-content">
+      <p>{{complaint.description}}</p>
+      <div class="complaint-photos" *ngIf="complaint.photos?.length">
+        <span>Foto:</span>
+        <div class="complaint-photo-list">
+          <img *ngFor="let photo of complaint.photos; let i = index"
+               [src]="photo.file_path"
+               alt="Foto Keluhan"
+               class="complaint-photo-thumb"
+               (click)="openCarousel(i)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carousel Dialog Modal -->
+  <dialog class="carousel-dialog" *ngIf="carouselOpen" open>
+    <form method="dialog">
+      <button class="carousel-close" (click)="closeCarousel()" type="button">&times;</button>
+    </form>
+    <img [src]="complaint.photos[carouselIndex]?.file_path" class="carousel-image" alt="Foto Keluhan" />
+    <div class="carousel-controls">
+      <button (click)="prevCarousel($event)" [disabled]="carouselIndex === 0">&#8592;</button>
+      <span>{{carouselIndex + 1}} / {{complaint.photos.length}}</span>
+      <button (click)="nextCarousel($event)" [disabled]="carouselIndex === complaint.photos.length - 1">&#8594;</button>
+    </div>
+  </dialog>
+
+  <!-- Delete Dialog -->
+  <dialog *ngIf="deleteDialogOpen" open class="delete-dialog">
+    <h2>Hapus Keluhan</h2>
+    <p>Yakin ingin menghapus keluhan ini?</p>
+    <div class="dialog-actions">
+      <button (click)="closeDeleteDialog()">Batal</button>
+      <button (click)="confirmDelete()">Hapus</button>
+    </div>
+  </dialog>
+</div>

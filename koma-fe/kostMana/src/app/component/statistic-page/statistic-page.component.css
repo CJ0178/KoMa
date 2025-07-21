@@ -1,0 +1,292 @@
+.statistics-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--color-bg);
+  color: var(--color-dark);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.statistics-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.statistics-header h1 {
+  margin: 0 0 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.filter-button,
+.download-button,
+.add-financial-button {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.filter-button:hover,
+.download-button:hover,
+.add-financial-button:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.filter-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.filter-content {
+  background: var(--color-bg);
+  color: var(--color-dark);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+}
+
+.filter-content h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.filter-section {
+  margin-bottom: 1.2rem;
+}
+
+.radio-group label {
+  margin-right: 1.5rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.filter-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-dark);
+}
+
+.filter-section input,
+.filter-section select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-muted);
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  background: var(--color-bg);
+  color: var(--color-dark);
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.filter-actions button {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.filter-actions button:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.statistics-table {
+  margin-top: 2rem;
+  background: var(--color-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-dark);
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid var(--color-muted);
+  padding: 0.7rem 1rem;
+  text-align: left;
+}
+
+.custom-table th {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-weight: 600;
+}
+
+.custom-table td {
+  background: var(--color-bg);
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: var(--color-primary);
+  transition: color 0.2s;
+}
+
+.edit-btn:hover {
+  color: var(--color-accent);
+}
+
+.delete-btn:hover {
+  color: #e74c3c;
+}
+
+.statistics-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto 0 auto;
+  padding: 2rem 0;
+}
+
+.statistics-content canvas {
+  width: 300px !important;
+  height: 220px !important;
+  max-width: 320px;
+  margin: 0;
+  display: block;
+}
+
+.info-message {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.filter-month-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-month-row .mat-form-field {
+  flex: 1;
+}
+
+.add-buttons-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.add-financial-button {
+  min-width: 180px;
+}
+
+/* --- Controls Row Styling --- */
+.statistics-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.property-select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--color-muted);
+}
+.property-select-row label {
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-right: 0.2rem;
+}
+.property-select-row select {
+  padding: 0.3rem 1.2rem 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-muted);
+  font-size: 0.95rem;
+  background: var(--color-bg);
+  color: var(--color-dark);
+}
+/* --- Compact Button Styling --- */
+.filter-button,
+.download-button,
+.add-financial-button {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.95rem;
+  min-width: 120px;
+  border-radius: 6px;
+}
+.add-financial-button {
+  min-width: 120px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .statistics-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .statistics-header h1 {
+    margin-bottom: 0;
+  }
+
+  .action-buttons {
+    margin-bottom: 0;
+  }
+}

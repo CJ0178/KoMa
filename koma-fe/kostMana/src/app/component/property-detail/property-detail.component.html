@@ -1,0 +1,137 @@
+<div class="property-detail">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+
+    <div class="property-detail-header" style="margin-top: 15px; display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <h2>{{ propertyDetail?.property_name || '-' }}</h2>
+        <p>{{ propertyDetail?.address || '-' }}{{ propertyDetail?.city ? ', ' + propertyDetail.city : '' }}</p>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <button class="gradient-button" *ngIf="allowEdit" (click)="openEditProperty()" style="margin-right: 12px;">
+           Edit Properti
+        </button>
+        <button class="delete-btn" *ngIf="allowEdit" (click)="onDeleteProperty()" style="margin-right: 12px;">Hapus Properti</button>
+        <button class="gradient-button" *ngIf="allowRating()" (click)="openRatingDialog(PropertyId)">Beri Rating</button>
+        <button class="gradient-button" *ngIf="isPenjaga && allowLeave()" (click)="leaveProperty(PropertyId)">
+          Keluar Properti
+        </button>
+      </div>
+    </div>
+
+    <!-- Responsive Image Gallery (carousel + grid + modal, sama seperti room-detail) -->
+    <div class="image-container-complete">
+      <div class="carousel-container" *ngIf="images.length > 0">
+        <div class="carousel-wrapper" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+          <div class="carousel-slide" *ngFor="let img of images">
+            <img [src]="img" (click)="openModal(img)" alt="Carousel image" />
+          </div>
+        </div>
+        <button class="nav prev" (click)="prev()">‹</button>
+        <button class="nav next" (click)="next()">›</button>
+      </div>
+      <div class="gallery-container" *ngIf="images.length > 1">
+        <div class="gallery-grid">
+          <img *ngFor="let img of images" [src]="img" (click)="openModal(img)" alt="Room image" class="gallery-img" />
+        </div>
+      </div>
+      <div class="modal" *ngIf="selectedImage" (click)="closeModal()">
+        <img [src]="selectedImage" class="modal-img" alt=""/>
+      </div>
+      <div class="add-photo-btn-wrapper">
+        <button class="gradient-button" *ngIf="allowEdit" (click)="openAddPropertyPhotoDialog()">
+          <span class="button-text">Tambahkan Foto</span>
+        </button>
+        <button class="gradient-button" *ngIf="canApplyAsKeeper()" (click)="applyAsKeeper()">
+          <span class="button-text">Ajukan Sebagai Penjaga</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab" [class.active]="selectedTab == 'info'" (click)="changeTab('info')">
+        Info Umum
+      </div>
+      <div class="tab" [class.active]="selectedTab == 'fasilitas'" (click)="changeTab('fasilitas')">
+        Fasilitas Bersama
+      </div>
+      <div class="tab" [class.active]="selectedTab == 'kamar'" (click)="changeTab('kamar')">
+        Kamar
+      </div>
+    </div>
+
+    <div *ngIf="selectedTab == 'info'" class="tab-content">
+      <div>
+        <h3>Deskripsi</h3>
+        <div class="deskripsi-box">
+          <p>
+            {{ propertyDetail?.description || '-' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="selectedTab == 'fasilitas'">
+      <div class="property-tab-header">
+        <h2>Fasilitas yang Tersedia</h2>
+        <button class="gradient-button" *ngIf="allowEdit" (click)="openAddFacilityDialog()">
+          <span class="button-text">Tambahkan</span>
+        </button>
+      </div>
+      <div class="facility-list-display" *ngIf="propertyDetail?.facilities && propertyDetail.facilities.length > 0">
+        <div *ngFor="let category of getFacilityCategories(propertyDetail.facilities)">
+          <h4 class="facility-category">{{ category.category.replace('PROPERTY_', '') }}</h4>
+          <div class="facility-list">
+            <div class="facility-card" *ngFor="let item of category.items">
+              <span class="facility-icon" [ngSwitch]="category.category.replace('PROPERTY_', '')">
+                <mat-icon *ngSwitchCase="'ELEKTRONIK'">electrical_services</mat-icon>
+                <mat-icon *ngSwitchCase="'PERALATAN TIDUR'">bed</mat-icon>
+                <mat-icon *ngSwitchCase="'PENYIMPANAN'">inventory_2</mat-icon>
+                <mat-icon *ngSwitchCase="'PERALATAN BELAJAR'">school</mat-icon>
+                <mat-icon *ngSwitchCase="'SANITASI'">shower</mat-icon>
+                <mat-icon *ngSwitchCase="'VENTILASI'">window</mat-icon>
+                <mat-icon *ngSwitchDefault>build</mat-icon>
+              </span>
+              <span class="facility-name">{{ item.facility_name }}</span>
+              <span *ngIf="item.quantity" class="facility-qty">({{item.quantity}})</span>
+              <span *ngIf="item.notes" class="facility-notes">- {{item.notes}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!propertyDetail?.facilities || propertyDetail.facilities.length === 0" class="facility-list-empty">
+        <div class="empty-message">Belum ada fasilitas terdaftar.</div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="selectedTab == 'kamar'">
+      <div class="property-tab-header">
+        <h2>Daftar Kamar</h2>
+        <button class="gradient-button" *ngIf="allowEdit" (click)="goToAddUnit()">
+          <span class="button-text">Tambahkan</span>
+        </button>
+      </div>
+      <div class="fasilitas-header">
+        <div *ngIf="units.length > 0; else noUnits">
+          <button (click)="goToRoomDetails(listprop.id)" class="propObj" *ngFor="let listprop of units">
+            <img class="listImg" src="{{listprop.propimage}}" alt="">
+            <h2>{{listprop.roomName}}</h2>
+            <h4>Rp {{listprop.price | number}}</h4>
+            <div [ngClass]="listprop.status == 1? 'roomReady' : 'roomNot'">
+              {{listprop.status == 1? 'Tersedia' : 'Tidak tersedia'}}
+            </div>
+            <button *ngIf="isPenghuni && listprop.id === userDetail.unit_id" class="btn-leave" (click)="leaveProperty(listprop.id); $event.stopPropagation()">
+              <mat-icon>logout</mat-icon>
+            </button>
+          </button>
+        </div>
+        <ng-template #noUnits>
+          <div class="empty-message">Belum ada kamar yang terdaftar untuk properti ini.</div>
+        </ng-template>
+      </div>
+
+    </div>
+    <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+  </div>

@@ -1,0 +1,66 @@
+<div class="landingPage">
+  <div class="flex-row-center">
+    <button class="gradient-button" (click)="goBack()">
+      <span class="button-text">Kembali</span>
+    </button>
+    <h2 class="title">Daftar Properti Anda</h2>
+    <div class="searchHeader">
+      <div class="InputContainer">
+        <input
+          placeholder="Penelusuran"
+          id="input"
+          class="input"
+          name="text"
+          type="text"
+        />
+        <label class="labelforsearch" for="input">
+          <svg class="searchIcon" viewBox="0 0 512 512">
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
+          </svg>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-column-center">
+    <ng-container *ngIf="PropListData.length > 0; else emptyState">
+      <div class="property-list-grid">
+        <div class="property-card" *ngFor="let item of PropListData" (click)="goToDetail(item.id)">
+          <div class="property-image-wrapper">
+            <img class="property-image" [src]="item.propimage" alt="kost-image" />
+          </div>
+          <div class="property-info">
+            <h2 class="property-title">{{item.name}}</h2>
+            <span class="badge-type">{{item.type}}</span>
+            <div class="location">{{item.location}}</div>
+            <div class="ratings">
+              <img src="../../../assets/images/star.svg" style="height: 13px;" alt="star">
+              {{item.rating}} ({{item.total_rater}} ulasan)
+            </div>
+            <div class="price" *ngIf="item.price && item.price > 0">Rp {{item.price | number}}</div>
+            <div class="property-actions" *ngIf="isPemilik">
+              <button class="btn-edit" (click)="goToEdit(item.id); $event.stopPropagation()">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="btn-delete" (click)="confirmDelete(item.id); $event.stopPropagation()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <div class="property-actions" *ngIf="isPenjaga || isPenghuni">
+              <button class="btn-leave" (click)="leaveProperty(item.id); $event.stopPropagation()">
+                <mat-icon>logout</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #emptyState>
+      <div class="empty-message">Belum ada properti yang terdaftar.</div>
+    </ng-template>
+    <button class="gradient-button add-property-btn" *ngIf="isPemilik" (click)="goToRegisterProperty()">
+      <span class="button-text">Tambah Properti</span>
+    </button>
+  </div>
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+</div>

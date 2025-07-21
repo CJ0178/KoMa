@@ -1,0 +1,74 @@
+### login
+
+POST http://localhost:9090/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Bcabca01#"
+}
+
+### Register Admin
+
+POST http://localhost:9090/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin1@koma.com",
+  "phone_number": "+1234567890",
+  "password": "Bcabca01#",
+  "date_of_birth": "01-01-1990",
+  "job": "Software Developer",
+  "gender": "M",
+  "role_id": 1
+}
+
+### Register Pemilik
+
+POST http://localhost:9090/auth/register
+Content-Type: application/json
+
+{
+  "name": "Owner User",
+  "email": "owner1@koma.com",
+  "phone_number": "+1234567890",
+  "password": "Bcabca01#",
+  "date_of_birth": "01-01-1990",
+  "job": "Software Developer",
+  "gender": "M",
+  "role_id": 2
+}
+
+
+### Register Penjaga
+
+POST http://localhost:9090/auth/register
+Content-Type: application/json
+
+{
+  "name": "Keeper User",
+  "email": "keeper1@koma.com",
+  "phone_number": "+1234567890",
+  "password": "Bcabca01#",
+  "date_of_birth": "01-01-1990",
+  "job": "Software Developer",
+  "gender": "M",
+  "role_id": 3
+}
+
+### Register Penghuni
+
+POST http://localhost:9090/auth/register
+Content-Type: application/json
+
+{
+  "name": "Penghuni User",
+  "email": "penghuni1@koma.com",
+  "phone_number": "+1234567890",
+  "password": "Bcabca01#",
+  "date_of_birth": "01-01-1990",
+  "job": "Software Developer",
+  "gender": "M",
+  "role_id": 4
+}

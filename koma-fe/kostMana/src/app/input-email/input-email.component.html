@@ -1,0 +1,23 @@
+  <div class="login-container">
+    <div class="login-card">
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email">Alamat E-mail</label>
+          <input
+            type="text"
+            id="email"
+            minlength="5"
+            formControlName="email"
+            placeholder="Masukkan alamat E-mail">
+        </div>
+
+        <button type="submit" class="login-button" [disabled]="!loginForm.valid">
+          Kirim email
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+

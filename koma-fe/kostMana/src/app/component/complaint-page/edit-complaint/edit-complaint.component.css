@@ -1,0 +1,127 @@
+.back-btn {
+  margin-bottom: 16px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.button-text {
+  margin-left: 4px;
+}
+.complaint-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+h2 {
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 600;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 15px;
+  background: #fafafa;
+  margin-bottom: 4px;
+}
+.character-counter {
+  font-size: 12px;
+  color: #888;
+  text-align: right;
+}
+.file-upload-container {
+  display: flex;
+  align-items: center;
+}
+.file-upload-label {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: var(--color-bg);
+  border: 1px dashed var(--color-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: all 0.3s;
+}
+
+.file-upload-label:hover {
+  background-color: var(--color-accent);
+  color: var(--color-dark);
+}
+input[type="file"] {
+  display: none;
+}
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 100%;
+}
+.preview-item {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.preview-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--color-muted);
+}
+.remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 25px;
+  height: 25px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(244, 197, 66, 0.12);
+}
+.submit-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

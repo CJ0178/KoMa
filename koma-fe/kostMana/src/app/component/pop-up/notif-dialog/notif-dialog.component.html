@@ -1,0 +1,12 @@
+<div>
+  <div mat-dialog-content>
+    <h2>Approval Booking</h2>
+    <p>Apakah Anda ingin menyetujui booking ini?</p>
+    <div><strong>Detail:</strong> {{data?.content}}</div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="approve()" color="primary">Setujui</button>
+    <button mat-button (click)="reject()" color="warn">Tolak</button>
+    <button mat-button (click)="dialogRef.close()">Batal</button>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Payment Error</title>
+  </head>
+  <body>
+    <h1>Payment Error</h1>
+    <p>Redirecting to error endpoint...</p>
+    <script type="text/javascript">
+      // Extract parameters from URL
+      const params = new URLSearchParams(window.location.search);
+      const data = {};
+      params.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      // Send data to the error endpoint
+      fetch('https://72e0-157-20-222-18.ngrok-free.app/billing/midtrans/status?'+params, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('Error handled:', result);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    </script>
+  </body>
+</html>
