@@ -1,4 +1,5 @@
 <div class="edit-property-container">
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
   <div class="edit-header">
     <button class="gradient-button" (click)="goBack()">
       <span class="button-text">Kembali</span>
@@ -108,7 +109,6 @@
         <h2 class="section-title">Fasilitas Properti</h2>
         <div class="facility-list">
           <div *ngFor="let category of facilityCategories">
-            <h3>{{ category }}</h3>
             <div class="facility-category">
               <button type="button" *ngFor="let fac of groupedFacilities[category]" (click)="addFacilityFromList(fac)" [disabled]="isFacilitySelected(fac)" class="facility-btn">
                 {{ fac.facility_name }}
@@ -131,7 +131,7 @@
       </div>
       <div class="form-actions">
         <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="propertyForm.invalid || !selectedFile">
+        <button type="submit" class="submit-btn" [disabled]="!propertyForm.valid">
           Simpan Perubahan
         </button>
       </div>

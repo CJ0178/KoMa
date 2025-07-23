@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class PropertyRatingService {
     private final PropertyRatingRepository propertyRatingRepository;
     private final PropertyRepository propertyRepository;
-    private final BillingRepository billingRepository;
     private final UserService userService;
 
     public ApiResponse giveOrUpdateRating(Long propertyId, int rating) {
@@ -48,19 +47,22 @@ public class PropertyRatingService {
 
         List<PropertyRatingModel> ratings = propertyRatingRepository.findByProperty(property);
 
-        // Konstanta Bayesian
-        double C = 4.0; // asumsi rata-rata global rating
-        int m = 3;      // minimal jumlah vote agar rating dianggap valid
-        int v = ratings.size(); // jumlah user yang memberi rating
-        double R = v == 0 ? 0 : ratings.stream().mapToInt(PropertyRatingModel::getRating).average().orElse(0);
+        int totalRater = ratings.size();
+        double averageRating = 0.0;
 
-        // Hitung Bayesian Weighted Rating
-        double weighted = (v / (double)(v + m)) * R + (m / (double)(v + m)) * C;
-        double roundedRating = Math.round(weighted * 10.0) / 10.0;
+        if (totalRater > 0) {
+            averageRating = ratings.stream()
+                .mapToInt(PropertyRatingModel::getRating)
+                .average()
+                .orElse(0.0);
+        }
+
+        // Bulatkan ke 1 angka di belakang koma
+        double roundedRating = Math.round(averageRating * 10.0) / 10.0;
 
         Map<String, Object> result = new HashMap<>();
         result.put("propertyId", property.getId());
-        result.put("totalRater", v);
+        result.put("totalRater", totalRater);
         result.put("rating", roundedRating);
 
         return result;

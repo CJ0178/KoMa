@@ -81,7 +81,7 @@ export class NavigationBarComponent implements OnInit {
     { icon: 'list', label: 'Kost Yang Dihuni', route: '/property-list', roles: ['penghuni'] },
     { icon: 'list', label: 'Kost Yang Dijaga', route: '/property-list', roles: ['penjaga'] },
     { icon: 'bar_chart', label: 'Statistik', route: '/statistik', roles: ['pemilik','penjaga'] },
-    { icon: 'info', label: 'Tentang Koma', route: '/about-us', roles: ['penghuni', 'pemilik'] }
+    { icon: 'info', label: 'Tentang Koma', route: '/about-us', roles: ['all'] }
   ];
 
   currentUserRole: string = ''; // This should be set based on your auth service

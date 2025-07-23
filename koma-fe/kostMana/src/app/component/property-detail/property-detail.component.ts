@@ -88,11 +88,11 @@ export class PropertyDetailComponent implements OnInit {
     if (this.PropertyId) {
       this.isLoading = true;
       this.propertyService.getPropertyById(this.PropertyId).subscribe((response: any) => {
-        this.isLoading = false;
         if (response && response.success && response.data) {
           this.propertyDetail = response.data;
           this.allowEdit = this.userRole === 'pemilik' && this.userDetail.email === response.data.user_create;
           if (response.data.units && Array.isArray(response.data.units)) {
+            this.isLoading = false;
             this.units = response.data.units.map((unit: any) => ({
               id: unit.id,
               roomName: unit.unit_name,
@@ -101,6 +101,7 @@ export class PropertyDetailComponent implements OnInit {
               status: unit.available ? 1 : 2
             }));
           } else {
+            this.isLoading = false;
             this.units = [];
           }
           // Inisialisasi images: thumbnail + photos unik
@@ -112,7 +113,6 @@ export class PropertyDetailComponent implements OnInit {
         }
       }, (error) => {
         this.isLoading = false;
-        // this.alertService.error((error?.error as any)?.message || 'Gagal mengambil detail properti.');
       });
     }
   }
@@ -280,11 +280,11 @@ export class PropertyDetailComponent implements OnInit {
     try {
       await this.propertyService.deleteProperty(this.PropertyId).toPromise();
       this.isLoading = false;
-      this.snackBar.open('Properti berhasil dihapus!', 'Tutup', { duration: 3000 });
+      this.alertService.success('Properti berhasil dihapus!');
       this.route.navigate(['/property-list']);
     } catch (err) {
       this.isLoading = false;
-      this.snackBar.open('Gagal menghapus properti.', 'Tutup', { duration: 3000 });
+      this.alertService.error('Gagal menghapus properti.');
     }
   }
 
@@ -357,11 +357,11 @@ export class PropertyDetailComponent implements OnInit {
   }
 
   allowLeave() {
-    return (this.isPenghuni || this.isPenjaga) && this.userDetail.property_id.includes(Number(this.PropertyId));
+    return (this.isPenghuni || this.isPenjaga) && this.userDetail.property_id?.includes(Number(this.PropertyId));
   }
 
   allowRating() {
-    return this.allowLeave() && !this.userDetail.rated_property_id.includes(Number(this.PropertyId));
+    return this.allowLeave() && !this.userDetail.rated_property_id?.includes(Number(this.PropertyId));
   }
 
 }

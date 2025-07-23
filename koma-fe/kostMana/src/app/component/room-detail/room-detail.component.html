@@ -51,7 +51,7 @@
       <button *ngIf="allowBooking()" class="book-button" (click)="openBookingDialog()">Mulai Booking</button>
     </div>
     <!-- Button for owner to edit unit -->
-    <div class="button-list" *ngIf="isPemilikKos">
+    <div class="button-list" *ngIf="checkPemilikKos()">
       <button class="edit-unit-btn" (click)="openEditUnitDialog()">Edit Unit</button>
       <button class="delete-unit-btn" (click)="deleteUnit()">Hapus Unit</button>
     </div>

@@ -4,6 +4,7 @@ import { ComplaintService } from '../../../service/complaint.service';
 import { AuthService } from '../../../service/auth.service';
 import { CloudinaryService } from '../../../service/cloudinary.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from '../../../service/alert.service';
 
 @Component({
   selector: 'app-complaint-detail',
@@ -36,7 +37,8 @@ export class ComplaintDetailComponent implements OnInit {
     private complaintService: ComplaintService,
     private authService: AuthService,
     private cloudinaryService: CloudinaryService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -51,13 +53,13 @@ export class ComplaintDetailComponent implements OnInit {
       this.isLoading = true;
       this.complaintService.getComplaintById(id).subscribe({
         next: (res) => {
-          this.snackBar.open(res?.message || 'Detail komplain berhasil diambil!', 'Tutup', { duration: 3000 });
+          this.alertService.success(res?.message || 'Detail komplain berhasil diambil!');
           this.complaint = res.data;
           this.isLoading = false;
           this.checkEditPermission();
         },
         error: (err) => {
-          this.snackBar.open(err?.error?.message || 'Gagal mengambil detail komplain.', 'Tutup', { duration: 3000 });
+          this.alertService.error(err?.error?.message || 'Gagal mengambil detail komplain.');
           this.isError = true;
           this.isLoading = false;
         }
@@ -161,13 +163,13 @@ export class ComplaintDetailComponent implements OnInit {
     };
     this.complaintService.updateComplaint(this.complaint.id, payload).subscribe({
       next: (res) => {
-        this.snackBar.open(res?.message || 'Komplain berhasil diupdate!', 'Tutup', { duration: 3000 });
+        this.alertService.success(res?.message || 'Komplain berhasil diupdate!');
         this.complaint = res.data;
         this.editDialogOpen = false;
         this.isLoading = false;
       },
       error: (err) => {
-        this.snackBar.open(err?.error?.message || 'Gagal update komplain.', 'Tutup', { duration: 3000 });
+        this.alertService.error(err?.error?.message || 'Gagal update komplain.');
         this.isLoading = false;
       }
     });
@@ -177,13 +179,13 @@ export class ComplaintDetailComponent implements OnInit {
     this.isLoading = true;
     this.complaintService.deleteComplaint(this.complaint.id).subscribe({
       next: () => {
-        this.snackBar.open('Keluhan berhasil dihapus', 'Tutup', { duration: 3000 });
+        this.alertService.success('Keluhan berhasil dihapus');
         this.deleteDialogOpen = false;
         this.isLoading = false;
         window.location.href = '/complain-page';
       },
       error: () => {
-        this.snackBar.open('Gagal menghapus keluhan', 'Tutup', { duration: 3000 });
+        this.alertService.error('Gagal menghapus keluhan');
         this.isLoading = false;
       }
     });
@@ -194,11 +196,11 @@ export class ComplaintDetailComponent implements OnInit {
     this.complaintService.setOnProgress(this.complaint.id).subscribe({
       next: (res: any) => {
         this.complaint = res.data;
-        alert('Status diubah menjadi MASIH_DIKERJAKAN');
+        this.alertService.success('Status diubah menjadi Masih Dikerjakan');
         this.isLoading = false;
       },
       error: () => {
-        alert('Gagal mengubah status');
+        this.alertService.error('Gagal mengubah status');
         this.isLoading = false;
       }
     });
@@ -209,11 +211,11 @@ export class ComplaintDetailComponent implements OnInit {
     this.complaintService.setDone(this.complaint.id).subscribe({
       next: (res: any) => {
         this.complaint = res.data;
-        alert('Status diubah menjadi SELESAI');
+        this.alertService.success('Status diubah menjadi Selesai');
         this.isLoading = false;
       },
       error: () => {
-        alert('Gagal mengubah status');
+        this.alertService.error('Gagal mengubah status');
         this.isLoading = false;
       }
     });

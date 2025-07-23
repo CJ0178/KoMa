@@ -178,7 +178,7 @@ export class StatisticPageComponent{
 
   applyFilters(): void {
     if (!this.selectedPropertyId) {
-      alert('Pilih properti terlebih dahulu!');
+      this.alertService.error('Pilih properti terlebih dahulu!');
       return;
     }
     this.financialService.getFinancialByProperty(this.selectedPropertyId).subscribe((res: any) => {

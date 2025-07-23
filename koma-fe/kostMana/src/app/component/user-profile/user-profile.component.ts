@@ -225,7 +225,8 @@ export class ChangePasswordDialogComponent {
     private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar,
-    private userService: UserService // tambahkan dependency
+    private userService: UserService,
+    private alertService: AlertService
   ) {
     this.passwordForm = this.fb.group({
       oldPassword: ['', Validators.required],
@@ -248,13 +249,13 @@ export class ChangePasswordDialogComponent {
     };
     this.userService.updatePassword(payload).subscribe({
       next: (res) => {
-        this.snackBar.open((res as any)?.message || 'Password berhasil diubah!', 'Tutup', { duration: 3000, verticalPosition: 'top', horizontalPosition: 'right', panelClass: 'snackbar-success' });
+        this.alertService.success((res as any)?.message || 'Password berhasil diubah!');
         this.passwordSuccess = 'Password berhasil diubah.';
         this.passwordForm.reset();
         this.dialogRef.close();
       },
       error: (err) => {
-        this.snackBar.open((err?.error as any)?.message || 'Gagal mengubah password.', 'Tutup', { duration: 3000, verticalPosition: 'top', horizontalPosition: 'right', panelClass: 'snackbar-error' });
+        this.alertService.error((err?.error as any)?.message || 'Gagal mengubah password.');
         this.passwordError = err?.error?.message || 'Gagal mengubah password.';
       }
     });
@@ -409,7 +410,8 @@ export class EditProfileDialogComponent {
     private cloudinaryService: CloudinaryService,
     private userService: UserService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private alertService: AlertService
   ) {
     this.editForm = this.fb.group({
       name: [data.user?.name || '', Validators.required],
@@ -460,7 +462,7 @@ export class EditProfileDialogComponent {
     };
     this.userService.updateUser(this.data.user?.user_id, payload).subscribe({
       next: (res) => {
-        this.snackBar.open((res as any)?.message || 'Profil berhasil diupdate!', 'Tutup', { duration: 3000, verticalPosition: 'top', horizontalPosition: 'right', panelClass: 'snackbar-success' });
+        this.alertService.success((res as any)?.message || 'Profil berhasil diupdate!');
         this.editSuccess = 'Profil berhasil diupdate.';
         // Update user menggunakan AuthService
         if (this.authService && typeof this.authService.setUser === 'function') {
@@ -469,7 +471,7 @@ export class EditProfileDialogComponent {
         setTimeout(() => this.dialogRef.close(true), 1200);
       },
       error: (err) => {
-        this.snackBar.open((err?.error as any)?.message || 'Gagal update profil.', 'Tutup', { duration: 3000, verticalPosition: 'top', horizontalPosition: 'right', panelClass: 'snackbar-error' });
+        this.alertService.error((err?.error as any)?.message || 'Gagal update profil.');
         this.editError = err?.error?.message || 'Gagal update profil.';
       }
     });

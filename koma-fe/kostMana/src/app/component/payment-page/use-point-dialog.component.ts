@@ -6,6 +6,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../service/alert.service';
 
 @Component({
   selector: 'app-use-point-dialog',
@@ -125,7 +126,8 @@ export class UsePointDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<UsePointDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { accumulatedPoint: number, totalAmount: number }
+    @Inject(MAT_DIALOG_DATA) public data: { accumulatedPoint: number, totalAmount: number },
+    private alertService: AlertService
   ) {
     this.maxPoint = Math.floor(Math.min(data.accumulatedPoint, data.totalAmount * 0.5));
   }
@@ -150,7 +152,7 @@ export class UsePointDialogComponent {
   }
 
   alertInvalidPoint() {
-    alert('Jumlah poin yang digunakan tidak boleh melebihi 50% dari total pembayaran.');
+    this.alertService.error('Jumlah poin yang digunakan tidak boleh melebihi 50% dari total pembayaran.');
   }
 
   getUsedPoint(): number {

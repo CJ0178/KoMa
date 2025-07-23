@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FACILITY_LIST } from '../../register-property/facility-list';
+import { FacilityCategoryService } from '../../../service/facility-category.service';
 
 @Component({
   selector: 'app-add-facility-dialog',
@@ -17,27 +17,29 @@ import { FACILITY_LIST } from '../../register-property/facility-list';
 })
 export class AddFacilityDialogComponent implements OnInit {
   facilityForm: FormGroup;
-  facilityList = FACILITY_LIST.filter(fac => fac.category.includes('PROPERTY_'));
+  facilityList: any[] = [];
   groupedFacilities: { [key: string]: any[] } = {};
   existingFacilities: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddFacilityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private facilityCategoryService: FacilityCategoryService
   ) {
     this.facilityForm = this.fb.group({
       facilities: this.fb.array([])
     });
-    this.groupFacilities();
     this.existingFacilities = data?.existingFacilities || [];
   }
 
   groupFacilities() {
     this.groupedFacilities = {};
     this.facilityList.forEach(fac => {
-      if (!this.groupedFacilities[fac.category]) this.groupedFacilities[fac.category] = [];
-      this.groupedFacilities[fac.category].push(fac);
+      if(fac.category==='PROPERTY'){
+        if (!this.groupedFacilities[fac.category]) this.groupedFacilities[fac.category] = [];
+        this.groupedFacilities[fac.category].push(fac);
+      }
     });
   }
 
@@ -73,12 +75,21 @@ export class AddFacilityDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Tidak perlu baris default, user pilih dari list
+    this.getAllFacilityCategory();
   }
 
   isFacilitySelected(facilityId: number): boolean {
     console.log('Checking facility selection:', facilityId, this.facilities.value, this.existingFacilities);
     return this.facilities.value.some((f: any) => f.facility_category_id === facilityId) ||
       this.existingFacilities.some((f: any) => f.facility_category_id === facilityId);
+  }
+
+  getAllFacilityCategory(){
+    this.facilityCategoryService.getAllFacilityCategory().subscribe({
+      next: (res) => {
+        this.facilityList = res.data;
+        this.groupFacilities();
+      }
+    });
   }
 }

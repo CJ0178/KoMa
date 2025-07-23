@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:500,700");
 @import "@angular/cdk/overlay-prebuilt";
+@import './styles/toast.css';
 
 :root {
   --color-primary: #2C3E50;
@@ -28,8 +29,10 @@ html, body{
     height: 100%;
     width: 100%;
     font-family: 'Montserrat';
+    overflow-x: hidden;
 }
 body { margin: 0 ; font-family: 'Montserrat', sans-serif; }
 * {
   font-family: inherit;
+  box-sizing: border-box;
 }

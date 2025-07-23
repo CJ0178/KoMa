@@ -10,6 +10,7 @@ import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FacilityCategoryService } from '../../service/facility-category.service';
+import { AlertService } from '../../service/alert.service';
 
 @Component({
   selector: 'app-add-unit',
@@ -28,6 +29,7 @@ export class AddUnitComponent implements OnInit {
 
   // For file-upload-container compatibility
   unitFiles: File[] = [];
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +41,8 @@ export class AddUnitComponent implements OnInit {
     private unitService: UnitService,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private facilityCategoryService: FacilityCategoryService
+    private facilityCategoryService: FacilityCategoryService,
+    private alertService: AlertService
   ) {
     this.unitForm = this.fb.group({
       property_id: ['', Validators.required],
@@ -247,6 +250,7 @@ export class AddUnitComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.unitForm.valid) {
+      this.isLoading = true;
       try {
         // Upload semua foto jika ada
         let photoUrls: any[] = [];
@@ -276,15 +280,18 @@ export class AddUnitComponent implements OnInit {
         };
         this.unitService.createUnit(unitData).subscribe({
           next: (res) => {
-            this.snackBar.open(res?.message || 'Unit berhasil dibuat!', 'Tutup', { duration: 3000 });
+            this.alertService.success(res?.message || 'Unit berhasil dibuat!');
+            this.isLoading = false;
             this.router.navigate(['property-detail', unitData.property_id]);
           },
           error: (err) => {
-            this.snackBar.open(err?.error?.message || 'Gagal membuat unit.', 'Tutup', { duration: 3000 });
+            this.isLoading = false;
+            this.alertService.error(err?.error?.message || 'Gagal membuat unit.');
           }
         });
       } catch (err) {
-        alert('Image upload failed');
+        this.isLoading = false;
+        this.alertService.error('Gagal upload gambar');
       }
     }
   }

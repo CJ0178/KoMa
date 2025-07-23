@@ -70,10 +70,12 @@
     <div class="form-group full-width">
       <label for="financialPhoto">Upload foto keuangan</label>
       <div class="file-upload-container">
-        <label for="financialPhoto" class="file-upload-label">
-          <span *ngIf="!selectedFiles || selectedFiles.length === 0">Pilih File</span>
-          <span *ngIf="selectedFiles && selectedFiles.length > 0">{{ selectedFiles.length }} file dipilih</span>
-        </label>
+        <input
+          type="file"
+          id="photo"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+        >
       </div>
       <div *ngIf="previewUrls && previewUrls.length" class="image-preview">
         <ng-container *ngFor="let url of previewUrls; let i = index">
@@ -91,3 +93,4 @@
     </div>
   </form>
 </div>
+v

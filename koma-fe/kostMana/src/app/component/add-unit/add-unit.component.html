@@ -1,5 +1,5 @@
 <div class="registration-container">
-
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
   <div class="register-header">
     <button class="gradient-button" (click)="goBack()">
       <span class="button-text">Kembali</span>
@@ -47,7 +47,7 @@
         </div>
         <div class="form-group">
           <label for="unit_width">Lantai</label>
-          <input id="unit_width" type="number" formControlName="floor" placeholder="Masukkan lebar unit">
+          <input id="unit_width" type="number" formControlName="floor" placeholder="Masukkan lantai unit">
         </div>
         <!-- <div class="form-group">
           <label for="promo_price">Harga Promo</label>

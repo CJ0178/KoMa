@@ -46,6 +46,7 @@ public class UnitDetailDTO extends UnitDTO {
     List<UnitPhotoDTO> photoDTOs = null;
     if (unit.getPhotos() != null) {
       photoDTOs = unit.getPhotos().stream()
+          .filter(photo -> photo.getActive())
           .map(photo -> UnitPhotoDTO.mapToDTO(photo))
           .collect(Collectors.toList());
     }
@@ -54,16 +55,18 @@ public class UnitDetailDTO extends UnitDTO {
     if (unit.getFacilities() != null) {
       List<FacilityDTO> facilityDTOs = new ArrayList<>();
       for (UnitFacilityModel unitFacilityModel : unit.getFacilities()) {
-        FacilityDTO facilityDTO = new FacilityDTO();
-        facilityDTO.setFacilityId(unitFacilityModel.getId());
-        if(unitFacilityModel.getFacilityCategory()!=null){
-          facilityDTO.setFacilityCategoryId(unitFacilityModel.getFacilityCategory().getId());
-          facilityDTO.setFacilityCategory(unitFacilityModel.getFacilityCategory().getCategoryName());
-          facilityDTO.setFacilityName(unitFacilityModel.getFacilityCategory().getFacilityName());
+        if(unitFacilityModel.getActive()){
+          FacilityDTO facilityDTO = new FacilityDTO();
+          facilityDTO.setFacilityId(unitFacilityModel.getId());
+          if(unitFacilityModel.getFacilityCategory()!=null){
+            facilityDTO.setFacilityCategoryId(unitFacilityModel.getFacilityCategory().getId());
+            facilityDTO.setFacilityCategory(unitFacilityModel.getFacilityCategory().getCategoryName());
+            facilityDTO.setFacilityName(unitFacilityModel.getFacilityCategory().getFacilityName());
+          }
+          facilityDTO.setQuantity(unitFacilityModel.getQuantity());
+          facilityDTO.setNotes(unitFacilityModel.getNotes());
+          facilityDTOs.add(facilityDTO);
         }
-        facilityDTO.setQuantity(unitFacilityModel.getQuantity());
-        facilityDTO.setNotes(unitFacilityModel.getNotes());
-        facilityDTOs.add(facilityDTO);
       }
       dto.setFacilities(facilityDTOs);
     }
@@ -81,7 +84,7 @@ public class UnitDetailDTO extends UnitDTO {
     // Penjaga kos
     if (unit.getProperty() != null && unit.getProperty().getKeepers() != null) {
       unit.getProperty().getKeepers().forEach(keeper -> {
-        if (ApprovalStatus.APPROVE.equals(keeper.getApprovalStatus()) && keeper.getKeeper() != null) {
+        if (ApprovalStatus.APPROVE.equals(keeper.getApprovalStatus()) && keeper.getKeeper() != null && keeper.getActive()) {
           ContactDTO keeperContact = new ContactDTO();
           keeperContact.setName(keeper.getKeeper().getName());
           keeperContact.setPhone(keeper.getKeeper().getPhoneNumber());

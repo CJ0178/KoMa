@@ -8,6 +8,7 @@
   color: var(--color-dark);
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  min-height: 65vh;
 }
 
 .page-title {

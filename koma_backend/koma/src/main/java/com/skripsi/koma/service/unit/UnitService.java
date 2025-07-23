@@ -57,7 +57,9 @@ public class UnitService {
     List<UnitModel> unitList = unitRepository.findAll();
     List<UnitDetailDTO> dtoList = new ArrayList<>();
     for (UnitModel unit : unitList) {
-      dtoList.add(UnitDetailDTO.mapToDTO(unit));
+      if(unit.getActive()){
+        dtoList.add(UnitDetailDTO.mapToDTO(unit));
+      }
     }
     return new ApiResponse<>(true, "Daftar kamar berhasil diambil", dtoList);
   }
@@ -66,6 +68,9 @@ public class UnitService {
     UnitModel unit = unitRepository.findById(id)
         .orElseThrow(
             () -> new CustomExceptions(HttpStatus.NOT_FOUND, "Kamar dengan ID " + id + " tidak ditemukan", null));
+    if(!unit.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Unit Not Active", null);
+    }
     return new ApiResponse<>(true, "Kamar berhasil ditemukan", UnitDetailDTO.mapToDTO(unit));
   }
 
@@ -114,12 +119,18 @@ public class UnitService {
     if (!photoModels.isEmpty()) {
       unitPhotoRepository.saveAll(photoModels);
     }
+    if(!facilities.isEmpty()){
+      unitFacilityRepository.saveAll(facilities);
+    }
     return new ApiResponse<>(true, "Kamar berhasil dibuat!", UnitDetailDTO.mapToDTO(unit));
   }
 
   public ApiResponse generateReferralLink(Long unitId) {
     UserModel referrer = userService.getUser();
-    UnitModel kamar = unitRepository.findById(unitId).orElseThrow();
+    UnitModel kamar = unitRepository.findById(unitId).orElseThrow(() -> new CustomExceptions(HttpStatus.BAD_REQUEST, "Unit not found", null));
+    if(!kamar.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Unit Not Active", null);
+    }
 
     String code = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 
@@ -136,6 +147,9 @@ public class UnitService {
   public ApiResponse<UnitDetailDTO> updateUnit(Long id, UnitDetailDTO request) {
     UserModel user = userService.getCurrentUser();
     UnitModel unit = unitRepository.findById(id).orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND, "Kamar dengan ID " + id + " tidak ditemukan", null));
+    if(!unit.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Unit Not Active", null);
+    }
     updateUnitFromDTO(unit, request);
     // Handle unit photos update
     if (request.getPhotos() != null) {
@@ -256,9 +270,13 @@ public class UnitService {
   public ApiResponse<Void> deleteUnit(Long id) {
     UnitModel unit = unitRepository.findById(id).orElseThrow(
         () -> new CustomExceptions(HttpStatus.NOT_FOUND, "Kamar dengan ID " + id + " tidak ditemukan", null));
-    unitPhotoRepository.deleteAllByUnitId(id);
-    unitFacilityRepository.deleteAllByUnitId(id);
-    unitRepository.deleteById(id);
+    if(!unit.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Unit Not Active", null);
+    }
+    // unitPhotoRepository.deleteAllByUnitId(id);
+    // unitFacilityRepository.deleteAllByUnitId(id);
+    unit.setActive(false);
+    unitRepository.save(unit);
     return new ApiResponse<>(true, "Kamar berhasil dihapus", null);
   }
 
@@ -272,6 +290,7 @@ public class UnitService {
     if (unit == null) {
       throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Anda bukan penghuni unit manapun", null);
     }
+
     // Cek tagihan yang belum lunas
     List<BillingModel> unpaidBills = billingRepository.findAllByOccupantAndStatusBillingIs(user,
         com.skripsi.koma.enums.BillingStatus.PENDING_PAYMENT);

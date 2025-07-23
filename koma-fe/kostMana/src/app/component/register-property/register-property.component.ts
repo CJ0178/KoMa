@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { CloudinaryService } from '../../service/cloudinary.service';
 import { firstValueFrom } from 'rxjs';
 import { AlertService } from '../../service/alert.service';
-import { FACILITY_LIST } from './facility-list';
+import { FacilityCategoryService } from '../../service/facility-category.service';
 
 @Component({
   selector: 'app-register-property',
@@ -30,8 +30,10 @@ export class RegisterPropertyComponent implements OnInit {
 
   facilityCategories: string[] = [];
   groupedFacilities: { [key: string]: any[] } = {};
+  facilityList: any[] = [];
 
   facilities: FormArray;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +42,8 @@ export class RegisterPropertyComponent implements OnInit {
     private propertyService: PropertyService,
     private http: HttpClient,
     private cloudinaryService: CloudinaryService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private facilityCategoryService: FacilityCategoryService
   ) {
     this.propertyForm = this.fb.group({
       propertyName: ['', Validators.required],
@@ -55,7 +58,7 @@ export class RegisterPropertyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupFacilities();
+    this.getAllFacilityCategory();
   }
 
   onFileSelected(event: any): void {
@@ -179,9 +182,8 @@ export class RegisterPropertyComponent implements OnInit {
   groupFacilities() {
     this.groupedFacilities = {};
     this.facilityCategories = [];
-    FACILITY_LIST.forEach(fac => {
-      if(fac.category.includes('PROPERTY_')){
-        fac.category = fac.category.replace('PROPERTY_', '');
+    this.facilityList.forEach(fac => {
+      if(fac.category==='PROPERTY'){
         if (!this.groupedFacilities[fac.category]) {
           this.groupedFacilities[fac.category] = [];
           this.facilityCategories.push(fac.category);
@@ -213,6 +215,7 @@ export class RegisterPropertyComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.propertyForm.valid && this.thumbnailFile) {
+      this.isLoading = true;
       try {
         // 1. Upload thumbnail image to Cloudinary via service
         const uploadRes: any = await firstValueFrom(this.cloudinaryService.uploadImage(this.thumbnailFile));
@@ -278,16 +281,20 @@ export class RegisterPropertyComponent implements OnInit {
             if (allSuccess) {
               this.alertService.success((res as any)?.message || 'Properti berhasil dibuat!');
               this.router.navigate(['landing-page']);
+              this.isLoading = false;
             } else {
+              this.isLoading = false;
               this.alertService.error(errorMsg || 'Properti dibuat, tapi ada data yang gagal ditambahkan.');
             }
           },
           error: (err) => {
+            this.isLoading = false;
             this.alertService.error((err?.error as any)?.message || 'Gagal membuat properti.');
           }
         });
       } catch (err) {
-        alert('Image upload failed');
+        this.isLoading = false;
+        this.alertService.error('Image upload failed');
       }
     }
   }
@@ -311,5 +318,14 @@ export class RegisterPropertyComponent implements OnInit {
   removePropertyImage(index: number): void {
     this.propertyFiles.splice(index, 1);
     this.propertyPreviews.splice(index, 1);
+  }
+
+  getAllFacilityCategory(){
+    this.facilityCategoryService.getAllFacilityCategory().subscribe({
+      next: (res) => {
+        this.facilityList = res.data;
+        this.groupFacilities();
+      }
+    });
   }
 }

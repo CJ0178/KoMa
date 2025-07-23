@@ -76,6 +76,7 @@ public class ComplaintDTO {
     List<ComplaintPhotoDTO> photoDTOs = null;
     if (complaint.getPhotos() != null) {
       photoDTOs = complaint.getPhotos().stream()
+          .filter(photo -> photo.getActive())
           .map(photo -> ComplaintPhotoDTO.mapToDTO(photo))
           .collect(Collectors.toList());
     }

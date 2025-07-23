@@ -107,7 +107,7 @@ export class RegisterPageComponent {
               this.authService.setUser(res.data.login_detail.user_detail); // update user observable
             }
           }
-          if (this.form.value.Role === 2) {
+          if (this.form.value.Role === "2") {
             this.router.navigate(['register-property']);
           } else {
             this.router.navigate(['landing-page']);

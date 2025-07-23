@@ -82,16 +82,19 @@
       </div>
       <div class="facility-list-display" *ngIf="propertyDetail?.facilities && propertyDetail.facilities.length > 0">
         <div *ngFor="let category of getFacilityCategories(propertyDetail.facilities)">
-          <h4 class="facility-category">{{ category.category.replace('PROPERTY_', '') }}</h4>
           <div class="facility-list">
             <div class="facility-card" *ngFor="let item of category.items">
-              <span class="facility-icon" [ngSwitch]="category.category.replace('PROPERTY_', '')">
-                <mat-icon *ngSwitchCase="'ELEKTRONIK'">electrical_services</mat-icon>
-                <mat-icon *ngSwitchCase="'PERALATAN TIDUR'">bed</mat-icon>
-                <mat-icon *ngSwitchCase="'PENYIMPANAN'">inventory_2</mat-icon>
-                <mat-icon *ngSwitchCase="'PERALATAN BELAJAR'">school</mat-icon>
-                <mat-icon *ngSwitchCase="'SANITASI'">shower</mat-icon>
-                <mat-icon *ngSwitchCase="'VENTILASI'">window</mat-icon>
+              <span class="facility-icon" [ngSwitch]="item.facility_name">
+                <mat-icon *ngSwitchCase="'Mesin Cuci'">local_laundry_service</mat-icon>
+                <mat-icon *ngSwitchCase="'Laundry'">dry_cleaning</mat-icon>
+                <mat-icon *ngSwitchCase="'Ruang Tamu'">chair</mat-icon>
+                <mat-icon *ngSwitchCase="'Dapur Bersama'">local_dining</mat-icon>
+                <mat-icon *ngSwitchCase="'Kulkas'">kitchen</mat-icon>
+                <mat-icon *ngSwitchCase="'Peralatan Masak'">restaurant_menu</mat-icon>
+                <mat-icon *ngSwitchCase="'Wi-Fi'">wifi</mat-icon>
+                <mat-icon *ngSwitchCase="'CCTV'">camera_indoor</mat-icon>
+                <mat-icon *ngSwitchCase="'Area Parkir'">local_parking</mat-icon>
+                <mat-icon *ngSwitchCase="'Dispenser'">water_drop</mat-icon>
                 <mat-icon *ngSwitchDefault>build</mat-icon>
               </span>
               <span class="facility-name">{{ item.facility_name }}</span>

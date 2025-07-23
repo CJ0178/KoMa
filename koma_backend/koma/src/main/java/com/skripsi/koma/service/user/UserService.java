@@ -65,6 +65,9 @@ public class UserService {
         .orElseThrow(
             () -> new CustomExceptions(HttpStatus.NOT_FOUND, "User dengan ID " + id + " tidak ditemukan", null));
 
+    if(!user.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "User Not Active", null);
+    }
     UserDetailDTO userDetailDTO = UserDetailDTO.mapToDTO(user);
     if (user.getRoleId() != null && user.getRoleId().getRoleName() != null) {
       switch (user.getRoleId().getRoleName()) {
@@ -100,6 +103,10 @@ public class UserService {
 
     if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
       throw new CustomExceptions(HttpStatus.BAD_REQUEST, "User Not Found", null);
+    }
+
+    if(!user.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "User Not Active", null);
     }
 
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
@@ -255,10 +262,11 @@ public class UserService {
   }
 
   public ApiResponse<Void> deleteUser(Long id) {
-    if (!userRepository.existsById(id)) {
-      throw new CustomExceptions(HttpStatus.NOT_FOUND, "User dengan ID " + id + " tidak ditemukan", null);
+    UserModel userModel = userRepository.findById(id).orElse(null);
+    if(userModel!=null){
+      userModel.setActive(false);
+      userRepository.save(userModel);
     }
-    userRepository.deleteById(id);
     return new ApiResponse<Void>(true, "User berhasil dihapus", null);
   }
 
@@ -311,7 +319,7 @@ public class UserService {
       user.setResetToken(token);
       user.setTokenExpiry(expiry);
       userRepository.save(user);
-      String resetLink = "http://localhost:4200/reset-password?token=" + token;
+      String resetLink = "https://koma-web.site/reset-password?token=" + token;
 
       String to = user.getEmail();
       String subject = "Reset Password Akun KOMA";
@@ -319,7 +327,9 @@ public class UserService {
               "Silakan klik link berikut untuk mengatur ulang password akun kamu:\n" +
               resetLink + "\n\n" +
               "Link ini berlaku selama 30 menit.\n\n" +
-              "Terima kasih.";
+              "Terima kasih\n\n"+
+              "Salam hangat,\n" +
+              "Tim KOMA";
       emailService.sendEmail(to, subject, content);
       return new ApiResponse(true, "Link reset password telah dikirim ke email", null);
   }

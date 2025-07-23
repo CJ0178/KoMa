@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { CloudinaryService } from '../../../service/cloudinary.service';
 import { PropertyService } from '../../../service/property.service';
 import { AuthService } from '../../../service/auth.service';
+import { AlertService } from '../../../service/alert.service';
 
 @Component({
   selector: 'app-edit-complaint',
@@ -32,7 +33,8 @@ export class EditComplaintComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private propertyService: PropertyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertService: AlertService
   ) {
     this.loadUserProperties();
   }
@@ -73,7 +75,7 @@ export class EditComplaintComponent implements OnInit {
           }
         },
         error: () => {
-          this.snackBar.open('Gagal memuat data keluhan', 'Tutup', { duration: 2000 });
+          this.alertService.error('Gagal memuat data keluhan');
         }
       });
     }
@@ -157,16 +159,16 @@ export class EditComplaintComponent implements OnInit {
       }
       this.complaintService.updateComplaint(this.complaintId, payload).subscribe({
         next: (res: any) => {
-          this.snackBar.open('Keluhan berhasil diupdate!', 'Tutup', { duration: 2000 });
+          this.alertService.success('Keluhan berhasil diupdate!');
           this.router.navigate(['/complain-page', this.complaintId]);
         },
         error: () => {
-          this.snackBar.open('Gagal update keluhan', 'Tutup', { duration: 2000 });
+          this.alertService.error('Gagal update keluhan');
         }
       }).add(() => this.isSubmitting = false);
     }).catch(() => {
       this.isSubmitting = false;
-      this.snackBar.open('Gagal upload foto. Silakan coba lagi.', 'Tutup', { duration: 2000 });
+      this.alertService.error('Gagal upload foto. Silakan coba lagi.');
     });
   }
 

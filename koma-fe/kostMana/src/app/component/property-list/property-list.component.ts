@@ -211,10 +211,10 @@ export class PropertyListComponent {
   }
 
   allowLeave(propertyId: number) {
-    return (this.isPenghuni || this.isPenjaga) && this.userDetail.property_id.includes(Number(propertyId));
+    return (this.isPenghuni || this.isPenjaga) && this.userDetail.property_id?.includes(Number(propertyId));
   }
 
   allowRating(propertyId: number) {
-    return this.allowLeave(propertyId) && !this.userDetail.rated_property_id.includes(Number(propertyId));
+    return this.allowLeave(propertyId) && !this.userDetail.rated_property_id?.includes(Number(propertyId));
   }
 }

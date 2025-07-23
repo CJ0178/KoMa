@@ -41,6 +41,7 @@ export class RoomDetailComponent implements OnInit {
   }
   ]
   unitDetail: any = null;
+  userDetail: any = null;
   images = []
   selectedImage: string | null = null;
   generatedLink: string | null = null;
@@ -67,6 +68,7 @@ export class RoomDetailComponent implements OnInit {
       this.isPenghuni = user && user.role_id === 4;
       this.isPemilikKos = user && user.role_id === 2;
       this.userUnitId = user.unit_id;
+      this.userDetail = user;
     });
     this.RoomId = this.activatedRoute.snapshot.paramMap.get('id');
   }
@@ -195,17 +197,21 @@ export class RoomDetailComponent implements OnInit {
   copyToClipboard(phone: string) {
     if (navigator && navigator.clipboard) {
       navigator.clipboard.writeText(phone).then(() => {
-        this.snackBar.open('Nomor telepon berhasil disalin!', 'Tutup', { duration: 2000 });
+        this.alertService.success('Nomor telepon berhasil disalin!');
       }, () => {
-        this.snackBar.open('Gagal menyalin nomor telepon.', 'Tutup', { duration: 2000 });
+        this.alertService.error('Gagal menyalin nomor telepon.');
       });
     } else {
-      this.snackBar.open('Clipboard API tidak didukung browser.', 'Tutup', { duration: 2000 });
+      this.alertService.error('Clipboard API tidak didukung browser.');
     }
   }
 
   allowBooking(){
     return this.unitDetail?.available && !this.userUnitId;
+  }
+
+  checkPemilikKos(){
+    return this.isPemilikKos && this.userDetail.property_id?.includes(this.unitDetail.property_id)
   }
 
 }

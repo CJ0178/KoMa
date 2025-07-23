@@ -50,7 +50,7 @@ export class LoginPageComponent implements OnInit {
             }
             this.router.navigate(['landing-page']);
           } else {
-            alert('Login failed: Invalid response');
+            this.alertService.error('Login failed: Invalid response');
           }
         },
         error: (err) => {

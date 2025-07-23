@@ -1,70 +1,89 @@
-.footerBody{
-    display: flex;
-    flex-direction: column;
-    background-color: #2C3E50;
-    color: #F5F7FA;
+.footerBody {
+  display: flex;
+  flex-direction: column;
+  background-color: #2C3E50;
+  color: #F5F7FA;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-h1{
-    font-size: larger;
-    font-weight: bold;
+.footerBody h1 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
-.flex-row{
-    display: flex;
-    flex-direction: row;
+.footerBody h3 {
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin: 0.2rem 0;
 }
 
-h3{
-    font-size: medium;
-    font-weight: 500;
+.contain1 {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem 5%;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
-.contain1{
-    display: flex;
-    flex-direction: row;
-    padding: 2% 7%;
+.itemLogo {
+  flex: 1 1 150px;
+  display: flex;
+  align-items: center;
 }
 
-.itemLogo{
-    padding-right: 7%;
-    width: 20%;
+.logoHeaderImg img {
+  height: 50px;
+  cursor: pointer;
 }
 
-.item1{
-    padding-right: 5%;
-    width: 30%;
+.item1, .item2, .item3, .item4 {
+  flex: 1 1 200px;
 }
 
-.item2{
-    padding-right: 5%;
-    width: 17%;
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.3rem 0;
 }
 
-.item3{
-    padding-right: 5%;
-    width: 20%;
+.flex-row img {
+  height: 20px;
+  width: 20px;
+  object-fit: contain;
 }
 
-.item4{
-    padding-right: 5%;
-    width: 20%;
-}
-
-.contain2{
-    display: flex;
-    padding: 20px 40px;
-    justify-content: flex-end;
+.item4 .flex-row img {
+  margin-right: 0.5rem;
+  cursor: pointer;
 }
 
 .divider {
-    height: 1px;
-    background-color: #eee;
-    margin: 1.25rem 0 0 0 ;
-  }
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 5% 1rem;
+}
 
-@media(max-width: 850px){
-    .footerBody{
-        display: none;
-    }
+.contain2 {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 5% 1rem;
+}
+
+.contain2 h1 {
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .footerBody {
+    display: none;
+  }
+}
+
+body {
+  padding-bottom: 0;
 }

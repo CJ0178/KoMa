@@ -35,7 +35,7 @@
             </h4>
             <h2>{{listprop.name}}</h2>
             <h4>{{listprop.location}}</h4>
-            <div class="ratings" *ngIf="listprop.total_rater > 5">
+            <div class="ratings" *ngIf="listprop.total_rater >= 5">
               <img src="../../../assets/images/star.svg" style="height: 13px;" alt="star">
               {{listprop.rating}} ({{listprop.total_rater}} ulasan)
             </div>

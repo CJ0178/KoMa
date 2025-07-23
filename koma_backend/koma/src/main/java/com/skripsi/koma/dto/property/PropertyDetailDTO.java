@@ -43,6 +43,7 @@ public class PropertyDetailDTO extends PropertyDTO {
     List<UnitDetailDTO> unitDTOs = null;
     if (property.getUnits() != null) {
       unitDTOs = property.getUnits().stream()
+          .filter(unit -> unit.getActive())
           .map(unit -> UnitDetailDTO.mapToDTO(unit))
           .collect(Collectors.toList());
     }
@@ -51,6 +52,7 @@ public class PropertyDetailDTO extends PropertyDTO {
     List<PropertyPhotoDTO> photoDTOs = null;
     if (property.getPhotos() != null) {
       photoDTOs = property.getPhotos().stream()
+          .filter(photo -> photo.getActive())
           .map(photo -> PropertyPhotoDTO.mapToDTO(photo))
           .collect(Collectors.toList());
     }
@@ -59,6 +61,7 @@ public class PropertyDetailDTO extends PropertyDTO {
     List<FacilityDTO> facilityDTOs = null;
     if (property.getFacilities() != null) {
       facilityDTOs = property.getFacilities().stream()
+          .filter(photo -> photo.getActive())
           .map(facility -> FacilityDTO.mapUnitFacilityToDTO(facility))
           .collect(Collectors.toList());
     }

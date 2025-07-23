@@ -9,11 +9,12 @@ import { PropertyService } from '../../service/property.service';
 import { CloudinaryService } from '../../service/cloudinary.service';
 import { AlertService } from '../../service/alert.service';
 import { FacilityCategoryService } from '../../service/facility-category.service';
+import { LoadingOverlayComponent } from '../loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-edit-unit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LoadingOverlayComponent],
   templateUrl: './edit-unit.component.html',
   styleUrls: ['./edit-unit.component.css']
 })
@@ -25,24 +26,8 @@ export class EditUnitComponent implements OnInit {
   unitFiles: File[] = [];
   isDragging: boolean = false;
 
-  facilityList = [
-    { id: 1, category: 'ELEKTRONIK', facility_name: 'AC' },
-    { id: 2, category: 'ELEKTRONIK', facility_name: 'TV' },
-    { id: 3, category: 'PERALATAN TIDUR', facility_name: 'Kasur' },
-    { id: 4, category: 'PERALATAN TIDUR', facility_name: 'Bantal' },
-    { id: 5, category: 'PERALATAN TIDUR', facility_name: 'Guling' },
-    { id: 6, category: 'PERALATAN TIDUR', facility_name: 'Sprei' },
-    { id: 7, category: 'PENYIMPANAN', facility_name: 'Lemari Baju' },
-    { id: 8, category: 'PERALATAN BELAJAR', facility_name: 'Meja' },
-    { id: 9, category: 'PERALATAN BELAJAR', facility_name: 'Kursi' },
-    { id: 10, category: 'SANITASI', facility_name: 'Kamar Mandi Dalam' },
-    { id: 11, category: 'SANITASI', facility_name: 'Kamar Mandi Luar' },
-    { id: 12, category: 'SANITASI', facility_name: 'Toilet Jongkok' },
-    { id: 13, category: 'SANITASI', facility_name: 'Toilet Duduk' },
-    { id: 14, category: 'SANITASI', facility_name: 'Shower' },
-    { id: 15, category: 'VENTILASI', facility_name: 'Jendela Dalam' },
-    { id: 16, category: 'VENTILASI', facility_name: 'Jendela Luar' }
-  ];
+  facilityList: any[] = [];
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -74,8 +59,10 @@ export class EditUnitComponent implements OnInit {
 
   ngOnInit() {
     this.unitId = this.route.snapshot.paramMap.get('id') || '';
+    this.isLoading = true;
     this.unitService.getUnitById(Number(this.unitId)).subscribe((response: any) => {
       if (response && response.success && response.data) {
+        this.isLoading = false;
         const unit = response.data;
         this.unitForm.patchValue({
           unit_name: unit.unit_name,

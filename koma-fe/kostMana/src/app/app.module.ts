@@ -65,6 +65,7 @@ import { ConfirmDeleteDialog } from './component/pop-up/confirm-delete-dialog.co
 import { LoadingOverlayComponent } from './component/loading-overlay/loading-overlay.component';
 import { EditComplaintComponent } from './component/complaint-page/edit-complaint/edit-complaint.component';
 import { DeletePropertyDialogComponent } from './component/property-list/delete-property-dialog.component';
+import { FooterComponent } from './component/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -130,7 +131,8 @@ import { DeletePropertyDialogComponent } from './component/property-list/delete-
     ConfirmDeleteDialog,
     LoadingOverlayComponent,
     DeletePropertyDialogComponent,
-    EditComplaintComponent
+    EditComplaintComponent,
+    FooterComponent
   ],
   providers: [
     provideHttpClient(),

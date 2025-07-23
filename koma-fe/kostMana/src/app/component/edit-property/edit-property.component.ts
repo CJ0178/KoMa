@@ -6,7 +6,8 @@ import { PropertyService } from '../../service/property.service';
 import { CloudinaryService } from '../../service/cloudinary.service';
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FACILITY_LIST } from '../register-property/facility-list';
+import { FacilityCategoryService } from '../../service/facility-category.service';
+import { AlertService } from '../../service/alert.service';
 
 @Component({
   selector: 'app-edit-property',
@@ -29,8 +30,10 @@ export class EditPropertyComponent implements OnInit {
 
   // Facility selection
   facilityCategories: string[] = [];
+  facilityList: any[] = [];
   groupedFacilities: { [key: string]: any[] } = {};
   facilities: FormArray;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +42,9 @@ export class EditPropertyComponent implements OnInit {
     private propertyService: PropertyService,
     private cloudinaryService: CloudinaryService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private facilityCategoryService: FacilityCategoryService,
+    private alertService: AlertService
   ) {
     this.propertyForm = this.fb.group({
       propertyName: ['', Validators.required],
@@ -57,6 +62,7 @@ export class EditPropertyComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this.propertyId = id;
+        this.isLoading = true;
         this.propertyService.getPropertyById(+id).subscribe((res: any) => {
           const p = res.data || res;
           this.propertyForm.patchValue({
@@ -90,10 +96,11 @@ export class EditPropertyComponent implements OnInit {
               }));
             });
           }
+          this.isLoading = false;
         });
       }
     });
-    this.groupFacilities();
+    this.getAllFacilityCategory();
   }
 
   // Thumbnail logic
@@ -173,9 +180,8 @@ export class EditPropertyComponent implements OnInit {
   groupFacilities() {
     this.groupedFacilities = {};
     this.facilityCategories = [];
-    FACILITY_LIST.forEach(fac => {
-      if(fac.category.includes('PROPERTY_')){
-        fac.category = fac.category.replace('PROPERTY_', '');
+    this.facilityList.forEach(fac => {
+      if(fac.category === 'PROPERTY'){
         if (!this.groupedFacilities[fac.category]) {
           this.groupedFacilities[fac.category] = [];
           this.facilityCategories.push(fac.category);
@@ -219,6 +225,7 @@ export class EditPropertyComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.propertyForm.valid && this.propertyId) {
+      this.isLoading = true;
       try {
         let imageUrl = this.imagePreview;
         if (this.selectedFile) {
@@ -277,18 +284,22 @@ export class EditPropertyComponent implements OnInit {
               }
             }
             if (allSuccess) {
-              this.snackBar.open(res?.message || 'Properti berhasil diupdate!', 'Tutup', { duration: 3000 });
-              this.router.navigate(['/property-list']);
+              this.isLoading = false;
+              this.alertService.success(res?.message || 'Properti berhasil diupdate!');
+              this.router.navigate(['/property-detail',this.propertyId]);
             } else {
-              this.snackBar.open(errorMsg || 'Properti diupdate, tapi ada data yang gagal ditambahkan.', 'Tutup', { duration: 4000 });
+              this.isLoading = false;
+              this.alertService.error(errorMsg || 'Properti diupdate, tapi ada data yang gagal ditambahkan.');
             }
           },
           error: (err) => {
-            this.snackBar.open(err?.error?.message || 'Gagal update properti.', 'Tutup', { duration: 3000 });
+            this.isLoading = false;
+            this.alertService.error(err?.error?.message || 'Gagal update properti.');
           }
         });
       } catch (err) {
-        alert('Image upload failed');
+        this.isLoading = false;
+        this.alertService.error('Gagal mengupdate properti');
       }
     }
   }
@@ -298,10 +309,10 @@ export class EditPropertyComponent implements OnInit {
     if (!confirm('Yakin ingin menghapus properti ini?')) return;
     try {
       await firstValueFrom(this.propertyService.deleteProperty(this.propertyId));
-      this.snackBar.open('Properti berhasil dihapus!', 'Tutup', { duration: 3000 });
+      this.alertService.error('Properti berhasil dihapus!');
       this.router.navigate(['/property-list']);
     } catch (err) {
-      this.snackBar.open('Gagal menghapus properti.', 'Tutup', { duration: 3000 });
+      this.alertService.error('Gagal menghapus properti.');
     }
   }
 
@@ -331,5 +342,14 @@ export class EditPropertyComponent implements OnInit {
 
   onDragLeave(): void {
     this.isDragging = false;
+  }
+
+  getAllFacilityCategory(){
+    this.facilityCategoryService.getAllFacilityCategory().subscribe({
+      next: (res) => {
+        this.facilityList = res.data;
+        this.groupFacilities();
+      }
+    });
   }
 }

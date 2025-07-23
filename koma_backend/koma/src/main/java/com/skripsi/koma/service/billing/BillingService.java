@@ -90,6 +90,8 @@ public class BillingService {
     if (billingRepository.existsActiveBookingByUnit(unit)) {
         throw new CustomExceptions(HttpStatus.CONFLICT, "Kamar ini sudah dibooking oleh penghuni lain", null);
     }
+    unit.setAvailable(false);
+    unitRepository.save(unit);
     BillingModel billingModel = new BillingModel();
     billingModel.setOccupant(user);
     billingModel.setProperty(property);
@@ -240,6 +242,7 @@ public class BillingService {
           "Permintaan booking kamar anda telah disetujui. Silahkan lakukan pembayaran tagihan booking kamar anda");
       notificationService.createNotification(notificationRequest);
     } else {
+      unit.setAvailable(true);
       billing.setStatusBilling(BillingStatus.BOOKING_REJECTED);
       NotificationDTO notificationRequest = new NotificationDTO();
       notificationRequest.setUnitId(unit.getId());
@@ -251,6 +254,7 @@ public class BillingService {
           "Permintaan booking kamar anda telah ditolak. Silahkan hubungi pemilik untuk informasi lebih lanjut");
       notificationService.createNotification(notificationRequest);
     }
+    unitRepository.save(unit);
     billingRepository.save(billing);
     apiResponse.setSuccess(true);
     apiResponse.setMessage("Approval billing berhasil");

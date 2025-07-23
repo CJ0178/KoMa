@@ -65,11 +65,13 @@ public class PropertyService {
     // Map property ke DTO dan ambil rating
     List<PropertyDTO> tempDTOs = new ArrayList<>();
     for (PropertyModel property : properties) {
-      PropertyDTO dto = PropertyDTO.mapToDTO(property);
-      Map<String, Object> ratingData = propertyRatingService.getRatingSummary(property.getId());
-      dto.setRating((Double) ratingData.get("rating"));
-      dto.setTotalRater((Integer) ratingData.get("totalRater"));
-      tempDTOs.add(dto);
+      if(property.getActive()){
+        PropertyDTO dto = PropertyDTO.mapToDTO(property);
+        Map<String, Object> ratingData = propertyRatingService.getRatingSummary(property.getId());
+        dto.setRating((Double) ratingData.get("rating"));
+        dto.setTotalRater((Integer) ratingData.get("totalRater"));
+        tempDTOs.add(dto);
+      }
     }
     // Urutkan: rating tertinggi, lalu jumlah kamar available
     tempDTOs.sort((d1, d2) -> {
@@ -97,11 +99,13 @@ public class PropertyService {
       throw new CustomExceptions(StatusCode.NOT_FOUND);
     }
     properties.stream().forEach(property -> {
-      Map<String, Object> ratingData = propertyRatingService.getRatingSummary(property.getId());
-      PropertyDTO dto = PropertyDTO.mapToDTO(property);
-      dto.setRating((Double) ratingData.get("rating"));
-      dto.setTotalRater((Integer) ratingData.get("totalRater"));
-      propertyDTOs.add(dto);
+      if(property.getActive()){
+        Map<String, Object> ratingData = propertyRatingService.getRatingSummary(property.getId());
+        PropertyDTO dto = PropertyDTO.mapToDTO(property);
+        dto.setRating((Double) ratingData.get("rating"));
+        dto.setTotalRater((Integer) ratingData.get("totalRater"));
+        propertyDTOs.add(dto);
+      }
     });
     return new ApiResponse<>(true, "Property ditemukkan", propertyDTOs);
   }
@@ -109,6 +113,9 @@ public class PropertyService {
   public ApiResponse<PropertyDetailDTO> getPropertyDetail(Long propertyId) {
     PropertyModel property = propertyRepository.findById(propertyId)
         .orElseThrow(() -> new CustomExceptions(StatusCode.NOT_FOUND));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     return new ApiResponse<>(true, "Property ditemukkan", PropertyDetailDTO.mapToDTO(property));
   }
 
@@ -131,6 +138,9 @@ public class PropertyService {
         .orElseThrow(
             () -> new CustomExceptions(HttpStatus.NOT_FOUND, "Property " + id + " tidak ditemukan",
                 null));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     BeanUtils.copyProperties(request, property, "id", "userCreate", "dateCreate");
     property.setUserUpdate(owner.getEmail());
     propertyRepository.save(property);
@@ -139,10 +149,12 @@ public class PropertyService {
 
   @Transactional
   public ApiResponse<Void> deleteProperty(Long id) {
-    if (!propertyRepository.existsById(id)) {
-      throw new CustomExceptions(HttpStatus.NOT_FOUND, "Property ID " + id + " tidak ditemukan", null);
+    PropertyModel property = propertyRepository.findById(id).orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND, "Property ID " + id + " tidak ditemukan", null));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
     }
-    propertyRepository.deleteById(id);
+    property.setActive(false);
+    propertyRepository.save(property);
     return new ApiResponse<>(true, "Property dihapus", null);
   }
 
@@ -150,6 +162,9 @@ public class PropertyService {
   public ApiResponse<List<PropertyPhotoDTO>> uploadPhotos(Long propertyId, List<PropertyPhotoDTO> photoDTOs) {
     PropertyModel property = propertyRepository.findById(propertyId)
         .orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND, "Property not found", null));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     List<PropertyPhotoDTO> result = new ArrayList<>();
     for (PropertyPhotoDTO photoDTO : photoDTOs) {
       PropertyPhotoModel photoModel = new PropertyPhotoModel();
@@ -171,6 +186,9 @@ public class PropertyService {
   public ApiResponse<List<FacilityDTO>> addPropertyFacilities(Long propertyId, List<FacilityDTO> facilityDTOs) {
     PropertyModel property = propertyRepository.findById(propertyId)
         .orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND, "Property not found", null));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     List<FacilityDTO> result = new ArrayList<>();
     for (FacilityDTO dto : facilityDTOs) {
       FacilityCategoryModel category = facilityCategoryRepository.findById(dto.getFacilityCategoryId())
@@ -189,6 +207,9 @@ public class PropertyService {
   public ApiResponse<Void> applyAsPropertyKeeper(Long propertyId) {
     PropertyModel property = propertyRepository.findById(propertyId)
         .orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND, "Property not found", null));
+    if(!property.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     UserModel user = userService.getCurrentUser();
     // Insert application to property_keeper
     PropertyKeeperModel keeperModel = new PropertyKeeperModel();

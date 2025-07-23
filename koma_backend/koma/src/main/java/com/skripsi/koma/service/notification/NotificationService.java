@@ -22,6 +22,7 @@ import com.skripsi.koma.repository.notification.NotificationRepository;
 import com.skripsi.koma.repository.property.PropertyKeeperRepository;
 import com.skripsi.koma.repository.property.PropertyRepository;
 import com.skripsi.koma.repository.unit.UnitRepository;
+import com.skripsi.koma.service.email.EmailService;
 import com.skripsi.koma.service.user.UserService;
 import com.skripsi.koma.util.CustomExceptions;
 
@@ -37,6 +38,7 @@ public class NotificationService {
   private final BillingRepository billingRepository;
   private final UserService userService;
   private final PropertyKeeperRepository propertyKeeperRepository;
+  private final EmailService emailService;
 
   public ApiResponse<List<NotificationDTO>> getAllByPropertyId(Long propertyId) {
     List<NotificationModel> notificationList = notificationRepository.findByPropertyId(propertyId);
@@ -48,28 +50,30 @@ public class NotificationService {
     });
     List<NotificationDTO> dtoList = new ArrayList<>();
     for (NotificationModel notification : notificationList) {
-      NotificationDTO dto = NotificationDTO.mapToDTO(notification);
-      if ("APPROVAL-BOOKING".equals(notification.getNotificationCategory())) {
-        BillingModel billing = billingRepository.findById(notification.getBilling().getId()).orElse(null);
-        if (billing != null) {
-          dto.setStatusApprove(billing.getStatusBilling().name());
-          if (billing.getStatusBilling() == BillingStatus.BOOKING_REQUEST) {
-            dto.setAllowApprove(true);
+      if(notification.getActive()){
+        NotificationDTO dto = NotificationDTO.mapToDTO(notification);
+        if ("APPROVAL-BOOKING".equals(notification.getNotificationCategory())) {
+          BillingModel billing = billingRepository.findById(notification.getBilling().getId()).orElse(null);
+          if (billing != null) {
+            dto.setStatusApprove(billing.getStatusBilling().name());
+            if (billing.getStatusBilling() == BillingStatus.BOOKING_REQUEST) {
+              dto.setAllowApprove(true);
+            }
           }
         }
-      }
-      if ("APPROVAL-KEEPER".equals(notification.getNotificationCategory())) {
-        PropertyKeeperModel propertyKeeper = propertyKeeperRepository.findById(notification.getPropertyKeeper().getId())
-            .orElse(null);
-        if (propertyKeeper != null) {
-          if (propertyKeeper.getApprovalStatus() != null) {
-            dto.setStatusApprove(propertyKeeper.getApprovalStatus().name());
-          } else {
-            dto.setAllowApprove(true);
+        if ("APPROVAL-KEEPER".equals(notification.getNotificationCategory())) {
+          PropertyKeeperModel propertyKeeper = propertyKeeperRepository.findById(notification.getPropertyKeeper().getId())
+              .orElse(null);
+          if (propertyKeeper != null) {
+            if (propertyKeeper.getApprovalStatus() != null) {
+              dto.setStatusApprove(propertyKeeper.getApprovalStatus().name());
+            } else {
+              dto.setAllowApprove(true);
+            }
           }
         }
+        dtoList.add(NotificationDTO.mapToDTO(notification));
       }
-      dtoList.add(NotificationDTO.mapToDTO(notification));
     }
     return new ApiResponse<>(true, "Daftar notifikasi berhasil diambil", dtoList);
   }
@@ -143,33 +147,35 @@ public class NotificationService {
       return d2.compareTo(d1);
     });
     for (NotificationModel notification : notificationList) {
-      if (!seenIds.contains(notification.getId())) {
-        NotificationDTO dto = NotificationDTO.mapToDTO(notification);
-        if ("APPROVAL-BOOKING".equals(notification.getNotificationCategory())) {
-          BillingModel billing = billingRepository.findById(notification.getBilling().getId()).orElse(null);
-          if (billing != null) {
-            dto.setStatusApprove(billing.getStatusBilling().name());
-            if (billing.getStatusBilling() == BillingStatus.BOOKING_REQUEST) {
-              dto.setAllowApprove(true);
-            }
-          }
-        }
-        if ("APPROVAL-KEEPER".equals(notification.getNotificationCategory())) {
-          if(notification.getPropertyKeeper()!=null){
-            PropertyKeeperModel propertyKeeper = propertyKeeperRepository
-                .findById(notification.getPropertyKeeper().getId())
-                .orElse(null);
-            if (propertyKeeper != null) {
-              if (propertyKeeper.getApprovalStatus() != null) {
-                dto.setStatusApprove(propertyKeeper.getApprovalStatus().name());
-              } else {
+      if(notification.getActive()){
+        if (!seenIds.contains(notification.getId())) {
+          NotificationDTO dto = NotificationDTO.mapToDTO(notification);
+          if ("APPROVAL-BOOKING".equals(notification.getNotificationCategory())) {
+            BillingModel billing = billingRepository.findById(notification.getBilling().getId()).orElse(null);
+            if (billing != null) {
+              dto.setStatusApprove(billing.getStatusBilling().name());
+              if (billing.getStatusBilling() == BillingStatus.BOOKING_REQUEST) {
                 dto.setAllowApprove(true);
               }
             }
           }
+          if ("APPROVAL-KEEPER".equals(notification.getNotificationCategory())) {
+            if(notification.getPropertyKeeper()!=null){
+              PropertyKeeperModel propertyKeeper = propertyKeeperRepository
+                  .findById(notification.getPropertyKeeper().getId())
+                  .orElse(null);
+              if (propertyKeeper != null) {
+                if (propertyKeeper.getApprovalStatus() != null) {
+                  dto.setStatusApprove(propertyKeeper.getApprovalStatus().name());
+                } else {
+                  dto.setAllowApprove(true);
+                }
+              }
+            }
+          }
+          dtoList.add(dto);
+          seenIds.add(notification.getId());
         }
-        dtoList.add(dto);
-        seenIds.add(notification.getId());
       }
     }
     if (dtoList.isEmpty()) {
@@ -224,6 +230,9 @@ public class NotificationService {
     NotificationModel notification = notificationRepository.findById(id)
         .orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND,
             "Notifikasi dengan ID " + id + " tidak ditemukan", null));
+    if(!notification.getActive()){
+      throw new CustomExceptions(HttpStatus.BAD_REQUEST, "Property Not Active", null);
+    }
     if (notificationRequest.getPropertyId() != null) {
       PropertyModel property = propertyRepository.findById(notificationRequest.getPropertyId()).orElse(null);
       notification.setProperty(property);
@@ -248,7 +257,8 @@ public class NotificationService {
     NotificationModel notification = notificationRepository.findById(id)
         .orElseThrow(() -> new CustomExceptions(HttpStatus.NOT_FOUND,
             "Notifikasi dengan ID " + id + " tidak ditemukan", null));
-    notificationRepository.delete(notification);
+    notification.setActive(false);
+    notificationRepository.save(notification);
     return new ApiResponse<>(true, "Notifikasi berhasil dihapus", null);
   }
 
@@ -267,6 +277,23 @@ public class NotificationService {
       notificationRequest
           .setContent("Tagihan Anda untuk pembayaran " + billing.getBillingType() + " jatuh tempo dalam waktu 7 hari.");
       createNotification(notificationRequest);
+      String to = billing.getOccupant().getEmail();
+      String subject = "Pengingat Pembayaran";
+      String message = "";
+      if(billing.getBillingType().equals("BOOKING")){
+        message = "Booking Anda akan jatuh tempo dalam waktu 7 hari. Segera lakukan pembayaran untuk mengamankan kamar yang Anda pilih.";
+        subject = "Pengingat Pembayaran Booking Kos";
+      } else {
+        message = "Tagihan kos bulanan Anda akan jatuh tempo dalam waktu 7 hari. Mohon segera lakukan pembayaran.";
+        subject = "Pengingat Pembayaran Bulanan Kos";
+      }
+      String content = "Halo " + billing.getOccupant().getName() + ",\n\n" +
+              message + "\n\n" +
+              "Silakan lakukan pembayaran melalui menu Pembayaran di aplikasi KOMA.\n\n" +
+              "Terima kasih telah tinggal di kos kami.\n\n" +
+              "Salam hangat,\n" +
+              "Tim KOMA";
+      emailService.sendEmail(to, subject, content);
     }
     return new ApiResponse<>(true, "Notifikasi berhasil dikirim", null);
   }
